@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 moveTarget; //Player's current target velocity
 
+    private int playerScore; //Score that depends on the items the player picks up
+
     //RUNTIME METHODS:
     private void Awake()
     {
@@ -75,6 +77,13 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = Vector3.Lerp(rb.velocity, correctedMoveTarget, swimAccel); //Lerp velocity (accelerate) toward target
             }
         }
+    }
+
+    public void PickedUpItem(int score)
+    {
+        //Adds to score counter
+        playerScore += score;
+        Debug.Log("Score: " + playerScore);
     }
 
     //INPUT METHODS:

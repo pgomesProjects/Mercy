@@ -5,11 +5,11 @@ using UnityEngine;
 public class SharkController : MonoBehaviour
 {
     public float speed = 5;
-    public float minTimeToRotate, maxTimeToRotate;
-    public float minRotateAngle, maxRotateAngle;
+    [SerializeField] [MinMaxSlider(1, 60)] private Vector2 rotateTimeConstraint;
+    [SerializeField] [MinMaxSlider(0, 360)] private Vector2 rotateAngleConstraints;
     private bool rotateGenerated = false;
     private float timer;
-    private float rotationTime = 3f;
+    [SerializeField] private float rotationTime = 3f;
     private float currentAngle;
 
     // Start is called before the first frame update
@@ -31,12 +31,12 @@ public class SharkController : MonoBehaviour
     private float GenerateRotateTime()
     {
         rotateGenerated = true;
-        return Random.Range(minTimeToRotate, maxTimeToRotate);
+        return Random.Range(rotateTimeConstraint.x, rotateTimeConstraint.y);
     }
 
     private float GenerateRotateAngle()
     {
-        return Random.Range(minRotateAngle, maxRotateAngle);
+        return Random.Range(rotateAngleConstraints.x, rotateAngleConstraints.y);
     }
 
     IEnumerator RotateShark(float rotateTime)
