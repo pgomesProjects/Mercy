@@ -11,11 +11,12 @@ GameObject:
   - component: {fileID: 2061423005058678111}
   - component: {fileID: 2061423005058678110}
   - component: {fileID: 2061423005058678105}
-  - component: {fileID: 2061423005058678104}
   - component: {fileID: 2061423005058678108}
+  - component: {fileID: 1792173148}
+  - component: {fileID: 1792173147}
   m_Layer: 0
   m_Name: Shark
-  m_TagString: Untagged
+  m_TagString: Shark
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 2061423005058678107}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 485, y: 56.05, z: 494.09}
-  m_LocalScale: {x: 12, y: 12, z: 12}
+  m_LocalScale: {x: 8, y: 8, z: 16}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -41,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2061423005058678107}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &2061423005058678105
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -83,20 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &2061423005058678104
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2061423005058678107}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2061423005058678108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,7 +96,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cacd4822fad0ab4c8e56fb4e88344b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  rotateTimeConstraint: {x: 3, y: 5}
-  rotateAngleConstraints: {x: 60, y: 90}
-  rotationTime: 3
+  speed: 10
+  rotSpeed: 20
+--- !u!54 &1792173148
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061423005058678107}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &1792173147
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061423005058678107}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.0000002, z: 1.0000002}
+  m_Center: {x: 0, y: 0, z: 0}
