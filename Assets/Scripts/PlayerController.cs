@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,7 +37,8 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 moveTarget; //Player's current target velocity
 
-    private int playerScore; //Score that depends on the items the player picks up
+    public float playerHealth = 1.00f; //The player's health attribute
+    private int playerScore; //Score that depends on the items the player picks upD
 
     //RUNTIME METHODS:
     private void Awake()
