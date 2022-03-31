@@ -27,7 +27,7 @@ public class UIButtons : MonoBehaviour
     }
     void StartGame()
     {
-        SceneManager.LoadScene("HotteScene");
+        SceneManager.LoadScene("GomesScene");
         //gameManager.StartGame(difficulty);
         
     }

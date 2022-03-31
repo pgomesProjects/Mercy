@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveTarget; //Player's current target velocity
 
     public float playerHealth = 1.00f; //The player's health attribute
-    private int playerScore; //Score that depends on the items the player picks upD
+    public int playerScore; //Score that depends on the items the player picks upD
 
     //RUNTIME METHODS:
     private void Awake()
@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour
         //Adds to score counter
         playerScore += score;
         Debug.Log("Score: " + playerScore);
+        GameManager.main.UpdateScore();
     }
 
     //INPUT METHODS:

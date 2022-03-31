@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject endGameMenu;
     public List<GameObject> targets;
     public TextMeshProUGUI scoreText;
-
+    public static GameManager main;
     public bool isGameActive;
     private int score;
     private float spawnRate = 1.0f;
@@ -22,13 +22,22 @@ public class GameManager : MonoBehaviour
     public bool gameOver;
 
     // Start is called before the first frame update
+    private void Awake()
+    {
+        if (GameManager.main == null)
+        {
+            main = this;
+
+        }
+        else Destroy(this);
+    }
     void Start()
     {
         isGameActive = true;
         score = 0;
         //scoreText.text = "Score: " + score;
         //StartCoroutine(SpawnTarget());
-        UpdateScore(0);
+        //UpdateScore(0);
     }
 
     // Update is called once per frame
@@ -46,13 +55,15 @@ public class GameManager : MonoBehaviour
             Instantiate(targets[index]);
         }
     }*/
-    public void UpdateScore(int scoreToAdd)
+    public void UpdateScore()
     {
-        if (!gameOver)
+        //PlayerController.main.playerScore = score;
+        scoreText.text = PlayerController.main.playerScore.ToString();
+        /*if (!gameOver)
         {
             score += scoreToAdd;
             scoreText.text = "Score: " + score;
-        }
+        }*/
     }
     public void GameOver()
     {
