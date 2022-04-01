@@ -27,6 +27,13 @@ public class GetPoint : MonoBehaviour
         return pos;
     }
 
+    public Vector3 SpawnNodeAtPlayer()
+    {
+        Vector3 pos = PlayerController.main.transform.position;
+        Instantiate(nodeObject, pos, nodeObject.transform.rotation);
+        return pos;
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {

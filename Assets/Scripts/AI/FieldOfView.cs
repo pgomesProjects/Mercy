@@ -7,7 +7,7 @@ public class FieldOfView : MonoBehaviour
 {
     public float radius;
     [Range(0, 360)]
-    public float angle;
+    public float blindSpotAngle, sightAngle;
 
     [HideInInspector]
     public PlayerController playerObject;
@@ -48,7 +48,20 @@ public class FieldOfView : MonoBehaviour
             Transform target = rangeChecks[0].transform;
             Vector3 directionToTarget = (target.position - transform.position).normalized;
 
-            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+
+            //If the target is in the blindspot range, they cannot see the player
+            if (Vector3.Angle(transform.forward, directionToTarget) < blindSpotAngle / 2)
+            {
+                float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
+                {
+                    canSeePlayer = false;
+                    Debug.Log("Player Is In Blindspot!");
+                }
+            }
+            //If the target is in the sight range, they can see the player
+            else if (Vector3.Angle(transform.forward, directionToTarget) < sightAngle / 2)
             {
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
@@ -60,13 +73,19 @@ public class FieldOfView : MonoBehaviour
             else
                 canSeePlayer = false;
         }
+        //If they lose sight of the player, start a cooldown before they go back to wandering
         else if (canSeePlayer)
+        {
             canSeePlayer = false;
+            StartCoroutine(sharkObject.threatenedCooldownCoroutine);
+        }
 
+        //If they can see the player, stop any alarm or cooldown coroutines and keep at threatened
         if (canSeePlayer)
         {
+            StopCoroutine(sharkObject.raiseAlarmCoroutine);
+            StopCoroutine(sharkObject.threatenedCooldownCoroutine);
             sharkObject.SetThreatLevel(SharkController.ThreatLevel.THREATENED);
-            Debug.Log("Shark Is Threatened!");
         }
     }
 }
