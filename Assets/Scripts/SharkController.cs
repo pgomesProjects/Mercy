@@ -5,15 +5,17 @@ using UnityEngine;
 public class SharkController : MonoBehaviour
 {
     [Header("Shark Speeds")]
-    [SerializeField] private float speed = 5;
-    [SerializeField] private float threatSpeed = 15;
-    [SerializeField] private float dashSpeed = 50;
-
+    [SerializeField] private float speed = 5; //The speed of the shark's movement
+    [SerializeField] private float threatSpeed = 15; //The speed of the shark's movement when threatened
+    [SerializeField] private float dashSpeed = 50; //The dash speed of the shark
+     
     [Header("Shark Rotation Values")]
-    [SerializeField] private float rotSpeed = 20;
-    [SerializeField] private float threatenedRotSpeed = 80;
+    [SerializeField] private float rotSpeed = 20; //The speed that the shark rotates its body towards its target position
+    [SerializeField] private float lookAtSpeed = 1; //The speed that the shark looks at it's target position
+    [SerializeField] private float threatenedRotSpeed = 80; //The speed that the shark rotates its body towards its target position when threatened
 
     [Header("Shark Attack Values")]
+    [SerializeField] private float attackRadius = 5; //The radius in front of the shark where the player is attacked in
     [SerializeField] private float initialAttackPower = 5; //The amount of damage the shark initially deals
     [SerializeField] private float currentAttackPower; //The amount of damage the shark currently deals
     [SerializeField] private float attackMultiplier = 1.25f; //The longer the player is being damaged by the shark, the more damage is dealt
@@ -67,9 +69,13 @@ public class SharkController : MonoBehaviour
         //If the shark is moving
         if (isMoving)
         {
+            //Check attack sensor before everything
+            CheckAttackSensor();
+
             //Always move the shark forward
             transform.position += transform.forward * currentSpeed * Time.deltaTime;
             rotTarget = Quaternion.LookRotation(targetPos - transform.position);
+            SmoothLookAt(rotTarget);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotTarget, currentRotSpeed * Time.deltaTime);
             Debug.DrawLine(transform.position, targetPos, Color.red);
 
@@ -94,12 +100,16 @@ public class SharkController : MonoBehaviour
         Debug.DrawLine(PlayerController.main.transform.position, transform.position, Color.cyan);
     }
 
+    private void SmoothLookAt(Quaternion targetRotation)
+    {
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookAtSpeed * Time.deltaTime);
+    }
+
     private void WanderBehavior()
     {
         //Generate random nodes while the player is not currently detected
         if (!nodeGenerated)
         {
-            transform.LookAt(targetPos);
             targetPos = GetPoint.instance.SpawnNodePoint();
             nodeGenerated = true;
         }
@@ -138,7 +148,6 @@ public class SharkController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(0.2f);
-            transform.LookAt(targetPos);
             DestroyAllNodes();
             targetPos = GetPoint.instance.SpawnNodeAtPlayer();
         }
@@ -164,6 +173,16 @@ public class SharkController : MonoBehaviour
         foreach (GameObject node in nodes)
             Destroy(node);
         nodeGenerated = false;
+    }
+
+    private void CheckAttackSensor()
+    {
+        //If the player is currently in the shark's body sensor, start raising an alarm
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position + transform.forward * 10, attackRadius, LayerMask.GetMask("Player"));
+        if (hitColliders.Length != 0)
+        {
+            Debug.Log("Player Has Been Attacked! Game Over!");
+        }
     }
 
     private void CheckBodySensor()
@@ -269,6 +288,8 @@ public class SharkController : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position + transform.forward * 10, attackRadius);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
