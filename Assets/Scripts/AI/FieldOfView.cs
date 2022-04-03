@@ -66,7 +66,13 @@ public class FieldOfView : MonoBehaviour
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
+                {
                     canSeePlayer = true;
+                    //If they can see the player, stop any alarm or cooldown coroutines and keep at threatened
+                    StopCoroutine(sharkObject.raiseAlarmCoroutine);
+                    StopCoroutine(sharkObject.threatenedCooldownCoroutine);
+                    sharkObject.SetThreatLevel(SharkController.ThreatLevel.THREATENED);
+                }
                 else
                     canSeePlayer = false;
             }
@@ -77,15 +83,9 @@ public class FieldOfView : MonoBehaviour
         else if (canSeePlayer)
         {
             canSeePlayer = false;
+            Debug.Log("Shark Lost Sight Of Player!");
+            sharkObject.ResetThreatenedCooldown();
             StartCoroutine(sharkObject.threatenedCooldownCoroutine);
-        }
-
-        //If they can see the player, stop any alarm or cooldown coroutines and keep at threatened
-        if (canSeePlayer)
-        {
-            StopCoroutine(sharkObject.raiseAlarmCoroutine);
-            StopCoroutine(sharkObject.threatenedCooldownCoroutine);
-            sharkObject.SetThreatLevel(SharkController.ThreatLevel.THREATENED);
         }
     }
 }

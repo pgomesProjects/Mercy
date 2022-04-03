@@ -177,7 +177,9 @@ public class SharkController : MonoBehaviour
             //Start the alarm raising coroutine if it has not been activated
             if (!alarmStarted)
             {
+                StopCoroutine(threatenedCooldownCoroutine);
                 currentAlarmTimer = timeUntilInterested;
+                ResetRaiseAlarm();
                 StartCoroutine(raiseAlarmCoroutine);
                 alarmStarted = true;
             }
@@ -188,7 +190,11 @@ public class SharkController : MonoBehaviour
             StopCoroutine(raiseAlarmCoroutine);
             isInSensor = false;
             alarmStarted = false;
-            StartCoroutine(threatenedCooldownCoroutine);
+            if(currentThreatLevel != ThreatLevel.WANDERING)
+            {
+                ResetThreatenedCooldown();
+                StartCoroutine(threatenedCooldownCoroutine);
+            }
         }
 
     }
@@ -205,11 +211,26 @@ public class SharkController : MonoBehaviour
         SetThreatLevel(ThreatLevel.THREATENED);
     }
 
+    public void ResetRaiseAlarm()
+    {
+        raiseAlarmCoroutine = RaiseAlarm();
+    }
+
     public IEnumerator ThreatenedCooldown()
     {
-        yield return new WaitForSeconds(threatenedCooldown);
-
+        float timer = 0;
+        Debug.Log("Cooldown Timer Started...");
+        while (timer < threatenedCooldown)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
         SetThreatLevel(ThreatLevel.WANDERING);
+    }
+
+    public void ResetThreatenedCooldown()
+    {
+        threatenedCooldownCoroutine = ThreatenedCooldown();
     }
 
     public ThreatLevel GetThreatLevel() { return currentThreatLevel; }
