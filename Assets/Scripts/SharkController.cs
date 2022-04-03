@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SharkController : MonoBehaviour
 {
+    [SerializeField] private float sharkWidth = 20;
+
     [Header("Shark Speeds")]
     [SerializeField] private float speed = 5; //The speed of the shark's movement
     [SerializeField] private float threatSpeed = 15; //The speed of the shark's movement when threatened
@@ -289,7 +291,7 @@ public class SharkController : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position + transform.forward * 10, attackRadius);
+        Gizmos.DrawWireSphere(transform.position + transform.forward * sharkWidth / 2, attackRadius);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
