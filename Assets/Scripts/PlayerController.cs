@@ -37,8 +37,10 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 moveTarget; //Player's current target velocity
 
-    public float playerHealth = 1.00f; //The player's health attribute
-    public int playerScore; //Score that depends on the items the player picks upD
+    [SerializeField] private int playerHealth = 100; //The player's health attribute
+    public int playerScore; //Score that depends on the items the player picks up
+
+    public Vector3 interestedAreaBox = new Vector3(200, 200, 200); //The area in which the shark goes to when interested
 
     //RUNTIME METHODS:
     private void Awake()
@@ -127,4 +129,13 @@ public class PlayerController : MonoBehaviour
     {
         
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        //Display the box that the shark spawns nodes at when interested
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireCube(transform.position, interestedAreaBox);
+    }
+#endif
 }
