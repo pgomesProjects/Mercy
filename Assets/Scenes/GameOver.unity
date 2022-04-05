@@ -826,7 +826,6 @@ GameObject:
   - component: {fileID: 1829976302}
   - component: {fileID: 1829976301}
   - component: {fileID: 1829976300}
-  - component: {fileID: 1829976303}
   m_Layer: 5
   m_Name: Start Button
   m_TagString: Untagged
@@ -898,13 +897,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: bc4257f7f80b9b8418b03a67025bb042, type: 3}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1839871618}
+        m_TargetAssemblyTypeName: GameOverController, Assembly-CSharp
+        m_MethodName: RestartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -948,18 +947,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1829976298}
   m_CullTransparentMesh: 1
---- !u!114 &1829976303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1829976298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4257f7f80b9b8418b03a67025bb042, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1839871613
 GameObject:
   m_ObjectHideFlags: 0
@@ -972,6 +959,7 @@ GameObject:
   - component: {fileID: 1839871616}
   - component: {fileID: 1839871615}
   - component: {fileID: 1839871614}
+  - component: {fileID: 1839871618}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1062,6 +1050,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1839871618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839871613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 120428514286c80458739d1f40bb3847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  restartLevel: GomesScene2
+  titlescreenLevel: TitleScene
 --- !u!1 &1975463075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1074,7 +1076,6 @@ GameObject:
   - component: {fileID: 1975463080}
   - component: {fileID: 1975463079}
   - component: {fileID: 1975463078}
-  - component: {fileID: 1975463077}
   m_Layer: 5
   m_Name: Quit Game
   m_TagString: Untagged
@@ -1102,18 +1103,6 @@ RectTransform:
   m_AnchoredPosition: {x: 479.89, y: 176}
   m_SizeDelta: {x: 110, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1975463077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1975463075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e320017a987b3da40a8b3ef330a01bbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1975463078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1158,10 +1147,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: e320017a987b3da40a8b3ef330a01bbb, type: 3}
-        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
-        m_MethodName: 
-        m_Mode: 5
+      - m_Target: {fileID: 1839871618}
+        m_TargetAssemblyTypeName: GameOverController, Assembly-CSharp
+        m_MethodName: ReturnToMain
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
         //Adds to score counter
         playerScore += score;
         Debug.Log("Score: " + playerScore);
-        GameManager.main.UpdateScore();
+        LevelManager.main.UpdateScore(playerScore);
     }
 
     //INPUT METHODS:

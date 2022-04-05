@@ -190,6 +190,7 @@ public class SharkController : MonoBehaviour
         if (hitColliders.Length != 0)
         {
             Debug.Log("Player Has Been Attacked! Game Over!");
+            LevelManager.main.GameOver();
         }
     }
 

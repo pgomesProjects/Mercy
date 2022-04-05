@@ -50,7 +50,7 @@ public class FieldOfView : MonoBehaviour
 
 
             //If the target is in the blindspot range, they cannot see the player
-            if (Vector3.Angle(transform.forward, directionToTarget) < blindSpotAngle / 2)
+            if ((Vector3.Angle(transform.forward, directionToTarget) < blindSpotAngle / 2) && sharkObject.currentThreatLevel != SharkController.ThreatLevel.THREATENED)
             {
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
@@ -72,6 +72,7 @@ public class FieldOfView : MonoBehaviour
                     StopCoroutine(sharkObject.raiseAlarmCoroutine);
                     StopCoroutine(sharkObject.threatenedCooldownCoroutine);
                     sharkObject.SetThreatLevel(SharkController.ThreatLevel.THREATENED);
+                    Debug.Log("Shark Can See Player!");
                 }
                 else
                     canSeePlayer = false;
