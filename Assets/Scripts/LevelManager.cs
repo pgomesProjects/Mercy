@@ -22,7 +22,10 @@ public class LevelManager : MonoBehaviour
         isGameOver = false;
         audioManager = FindObjectOfType<AudioManager>();
         if(audioManager != null)
-            FindObjectOfType<AudioManager>().Play("InGame", 0.2f);
+        {
+            GameManager.instance.playingSongName = "InGame";
+            FindObjectOfType<AudioManager>().Play(GameManager.instance.playingSongName, PlayerPrefs.GetFloat("BGMVolume"));
+        }
     }
 
     public void UpdateScore(int score)
@@ -35,8 +38,8 @@ public class LevelManager : MonoBehaviour
         isGameOver = true;
         if (audioManager != null)
         {
-            FindObjectOfType<AudioManager>().Stop("InGame");
-            FindObjectOfType<AudioManager>().Play("GameOverSFX", 1);
+            FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);
+            FindObjectOfType<AudioManager>().Play("GameOverSFX", PlayerPrefs.GetFloat("SFXVolume"));
         }
         SceneManager.LoadScene("GameOver");
     }

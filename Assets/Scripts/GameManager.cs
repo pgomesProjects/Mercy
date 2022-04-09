@@ -7,86 +7,26 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public TextMeshProUGUI finalScore; 
-    public GameObject endGameMenu;
-    public List<GameObject> targets;
-    public TextMeshProUGUI scoreText;
-    public static GameManager main;
-    public bool isGameActive;
-    private int score;
-    private float spawnRate = 1.0f;
-    //public TextMeshProUGUI gameOverText;
-    //public Button restartButton;
-    //public GameObject titleScreen;
-    public int divider;
-    public bool gameOver;
+    public static GameManager instance;
+    public GameSettings currentSettings = new GameSettings();
 
-    // Start is called before the first frame update
+    [HideInInspector]
+    public string playingSongName = "";
+
     private void Awake()
     {
-        if (GameManager.main == null)
+        if (instance == null)
         {
-            main = this;
-
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        else Destroy(this);
-    }
-    void Start()
-    {
-        isGameActive = true;
-        score = 0;
-        //scoreText.text = "Score: " + score;
-        //StartCoroutine(SpawnTarget());
-        //UpdateScore(0);
+        else
+            Destroy(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnApplicationQuit()
     {
-        /*score++;
-        scoreText.text = "Score: " + (score / divider);*/
+        Debug.Log("Quitting Game...");
+        PlayerPrefs.SetInt("OnApplicationOpen", 0);
     }
-    /*IEnumerator SpawnTarget()
-    {
-        while (isGameActive)
-        {
-            yield return new WaitForSeconds(spawnRate);
-            int index = Random.Range(0, targets.Count);
-            Instantiate(targets[index]);
-        }
-    }*/
-    public void UpdateScore()
-    {
-        //PlayerController.main.playerScore = score;
-        scoreText.text = PlayerController.main.playerScore.ToString();
-        /*if (!gameOver)
-        {
-            score += scoreToAdd;
-            scoreText.text = "Score: " + score;
-        }*/
-    }
-    public void GameOver()
-    {
-        endGameMenu.SetActive(true);
-        finalScore.text = scoreText.text;
-        //restartButton.gameObject.SetActive(true);
-        //gameOverText.gameObject.SetActive(true);
-        gameOver = true;
-        isGameActive = false;
-    }
-    /*public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-    public void StartGame()
-    {
-        isGameActive = true;
-        score = 0;
-
-        StartCoroutine(SpawnTarget());
-        UpdateScore(0);
-
-        titleScreen.gameObject.SetActive(false);
-    }*/
-    
 }

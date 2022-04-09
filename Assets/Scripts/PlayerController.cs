@@ -58,6 +58,10 @@ public class PlayerController : MonoBehaviour
         //Initialization:
         lookOrigin = transform.localRotation; //Get initial player rotation
         lookTarget = transform.localRotation; //Use this for initial rotation target as well
+
+        //Set look sensitivity from settings
+        //lookSensitivity.x = PlayerPrefs.GetFloat("MouseSensitivity");
+        //lookSensitivity.y = PlayerPrefs.GetFloat("MouseSensitivity");
     }
     private void Update()
     {

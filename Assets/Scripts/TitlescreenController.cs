@@ -12,13 +12,12 @@ public class TitlescreenController : MonoBehaviour
 
     private void Start()
     {
-        FindObjectOfType<AudioManager>().Play("Titlescreen", 1);
         currentMenuState = MenuState.TITLESCREEN;
     }
 
     public void StartGame()
     {
-        FindObjectOfType<AudioManager>().Stop("Titlescreen");
+        FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);
         SceneManager.LoadScene(levelToLoad);
     }
 
@@ -41,7 +40,6 @@ public class TitlescreenController : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("Quitting Game...");
         Application.Quit();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
