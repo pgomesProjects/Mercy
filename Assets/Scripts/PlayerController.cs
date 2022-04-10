@@ -37,8 +37,10 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 moveTarget; //Player's current target velocity
 
-    public float playerHealth = 1.00f; //The player's health attribute
-    public int playerScore; //Score that depends on the items the player picks upD
+    [SerializeField] private int playerHealth = 100; //The player's health attribute
+    public int playerScore; //Score that depends on the items the player picks up
+
+    public Vector3 interestedAreaBox = new Vector3(200, 200, 200); //The area in which the shark goes to when interested
 
     //RUNTIME METHODS:
     private void Awake()
@@ -56,6 +58,10 @@ public class PlayerController : MonoBehaviour
         //Initialization:
         lookOrigin = transform.localRotation; //Get initial player rotation
         lookTarget = transform.localRotation; //Use this for initial rotation target as well
+
+        //Set look sensitivity from settings
+        //lookSensitivity.x = PlayerPrefs.GetFloat("MouseSensitivity");
+        //lookSensitivity.y = PlayerPrefs.GetFloat("MouseSensitivity");
     }
     private void Update()
     {
@@ -86,7 +92,7 @@ public class PlayerController : MonoBehaviour
         //Adds to score counter
         playerScore += score;
         Debug.Log("Score: " + playerScore);
-        GameManager.main.UpdateScore();
+        LevelManager.main.UpdateScore(playerScore);
     }
 
     //INPUT METHODS:
@@ -127,4 +133,13 @@ public class PlayerController : MonoBehaviour
     {
         
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        //Display the box that the shark spawns nodes at when interested
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireCube(transform.position, interestedAreaBox);
+    }
+#endif
 }

@@ -119,7 +119,12 @@ public class SharkController : MonoBehaviour
 
     private void InterestedBehavior()
     {
-
+        //Generate random nodes while the player is not currently detected
+        if (!nodeGenerated)
+        {
+            targetPos = GetPoint.instance.SpawnPointCloseToPlayer();
+            nodeGenerated = true;
+        }
     }
 
     private void ThreatenedBehavior()
@@ -136,6 +141,7 @@ public class SharkController : MonoBehaviour
             StartCoroutine(playerNodeSpawnCoroutine);
         }
     }
+
 
     private void BeginThreat()
     {
@@ -184,6 +190,7 @@ public class SharkController : MonoBehaviour
         if (hitColliders.Length != 0)
         {
             Debug.Log("Player Has Been Attacked! Game Over!");
+            LevelManager.main.GameOver();
         }
     }
 
@@ -266,6 +273,7 @@ public class SharkController : MonoBehaviour
                 break;
             case ThreatLevel.INTEREST:
                 Debug.Log("Threat Level: Interested");
+                DestroyAllNodes();
                 RemoveThreatSettings();
                 break;
             case ThreatLevel.THREATENED:
