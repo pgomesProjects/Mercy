@@ -59,6 +59,7 @@ public class SharkController : MonoBehaviour
         currentRotSpeed = rotSpeed;
         playerLockedOn = false;
         currentThreatLevel = ThreatLevel.WANDERING;
+        LevelManager.main.UpdateThreatUI((int)currentThreatLevel);
         raiseAlarmCoroutine = RaiseAlarm();
         threatenedCooldownCoroutine = ThreatenedCooldown();
         dashCoroutine = DashAtSpeed();
@@ -280,6 +281,7 @@ public class SharkController : MonoBehaviour
                 Debug.Log("Threat Level: Threatened");
                 break;
         }
+        LevelManager.main.UpdateThreatUI((int)currentThreatLevel);
     }
 
     private void RemoveThreatSettings()
