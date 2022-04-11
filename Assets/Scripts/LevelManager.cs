@@ -29,6 +29,7 @@ public class LevelManager : MonoBehaviour
         {
             GameManager.instance.playingSongName = "InGame";
             FindObjectOfType<AudioManager>().Play(GameManager.instance.playingSongName, PlayerPrefs.GetFloat("BGMVolume"));
+            StartThreatMusic(0);
         }
     }
 
@@ -40,6 +41,23 @@ public class LevelManager : MonoBehaviour
     public void UpdateThreatUI(int level)
     {
         threatUI.color = threatColors[level];
+    }
+
+    public void StartThreatMusic(int level)
+    {
+        if (audioManager != null)
+        {
+            Debug.Log("Starting Heartbeat" + (level + 1));
+            FindObjectOfType<AudioManager>().Play("Heartbeat" + (level + 1), PlayerPrefs.GetFloat("SFXVolume"));
+        }
+    }
+
+    public void StopThreatMusic(int level)
+    {
+        if (audioManager != null)
+        {
+            FindObjectOfType<AudioManager>().Stop("Heartbeat" + (level + 1));
+        }
     }
 
     public void GameOver()

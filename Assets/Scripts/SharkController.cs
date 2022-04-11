@@ -149,6 +149,8 @@ public class SharkController : MonoBehaviour
         //Destroy any existing nodes and start the dashing coroutine
         DestroyAllNodes();
         StartCoroutine(dashCoroutine);
+        //Update the UI and the music
+        LevelManager.main.UpdateThreatUI((int)currentThreatLevel);
     }
 
     IEnumerator SpawnNodesOnPlayer()
@@ -191,6 +193,9 @@ public class SharkController : MonoBehaviour
         if (hitColliders.Length != 0)
         {
             Debug.Log("Player Has Been Attacked! Game Over!");
+
+            //Stop the current threat music
+            LevelManager.main.StopThreatMusic((int)currentThreatLevel);
             LevelManager.main.GameOver();
         }
     }
@@ -265,6 +270,12 @@ public class SharkController : MonoBehaviour
     public ThreatLevel GetThreatLevel() { return currentThreatLevel; }
     public void SetThreatLevel(ThreatLevel threatLevel)
     {
+        if(threatLevel != currentThreatLevel)
+        {
+            //Stop the current threat music before beginning a new one
+            LevelManager.main.StopThreatMusic((int)currentThreatLevel);
+            LevelManager.main.StartThreatMusic((int)threatLevel);
+        }
         currentThreatLevel = threatLevel;
         switch (currentThreatLevel)
         {
@@ -281,6 +292,8 @@ public class SharkController : MonoBehaviour
                 Debug.Log("Threat Level: Threatened");
                 break;
         }
+
+        //Update the UI
         LevelManager.main.UpdateThreatUI((int)currentThreatLevel);
     }
 
