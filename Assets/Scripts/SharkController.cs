@@ -118,7 +118,7 @@ public class SharkController : MonoBehaviour
     private void CheckLookAtTarget(Quaternion targetRotation)
     {
         //If the degree between the current rotation and the target rotation is less than 5 degrees, they have looked at their target
-        if (Quaternion.Angle(transform.rotation, targetRotation) < 5)
+        if (Mathf.Abs(Quaternion.Angle(transform.rotation, targetRotation)) < 5)
         {
             //If the shark is looking at its target, rotate slowly if position updates
             currentLookAtSpeed = targetLookedAtSpeed;

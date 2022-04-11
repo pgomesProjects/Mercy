@@ -1403,6 +1403,10 @@ PrefabInstance:
       propertyPath: sightAngle
       value: 115
       objectReference: {fileID: 0}
+    - target: {fileID: 33956439, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
+      propertyPath: blindSpotAngle
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678107, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: m_Name
       value: Shark
