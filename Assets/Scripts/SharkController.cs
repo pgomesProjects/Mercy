@@ -14,7 +14,9 @@ public class SharkController : MonoBehaviour
     [Header("Shark Rotation Values")]
     [SerializeField] private float rotSpeed = 20; //The speed that the shark rotates its body towards its target position
     [SerializeField] private float lookAtSpeed = 1; //The speed that the shark looks at it's target position
+    [SerializeField] private float targetLookedAtSpeed = 0.25f; //The speed that the shark updates it's rotation when looking directly at its position
     [SerializeField] private float threatenedRotSpeed = 80; //The speed that the shark rotates its body towards its target position when threatened
+    [SerializeField] private float lookingAtTargetRotSpeed = 1; //The speed that the shark rotates its body towards its target position when threatened
 
     [Header("Shark Attack Values")]
     [SerializeField] private float attackRadius = 5; //The radius in front of the shark where the player is attacked in
@@ -35,6 +37,7 @@ public class SharkController : MonoBehaviour
 
     private float currentSpeed;
     private float currentRotSpeed;
+    private float currentLookAtSpeed;
 
     private Vector3 targetPos;
     private Quaternion rotTarget;
@@ -57,6 +60,7 @@ public class SharkController : MonoBehaviour
         alarmStarted = false;
         currentSpeed = speed;
         currentRotSpeed = rotSpeed;
+        currentLookAtSpeed = lookAtSpeed;
         playerLockedOn = false;
         currentThreatLevel = ThreatLevel.WANDERING;
         LevelManager.main.UpdateThreatUI((int)currentThreatLevel);
@@ -75,11 +79,13 @@ public class SharkController : MonoBehaviour
             //Check attack sensor before everything
             CheckAttackSensor();
 
+            CheckLookAtTarget(rotTarget);
+            SmoothLookAt(rotTarget);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotTarget, currentRotSpeed * Time.deltaTime);
+
             //Always move the shark forward
             transform.position += transform.forward * currentSpeed * Time.deltaTime;
             rotTarget = Quaternion.LookRotation(targetPos - transform.position);
-            SmoothLookAt(rotTarget);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotTarget, currentRotSpeed * Time.deltaTime);
             Debug.DrawLine(transform.position, targetPos, Color.red);
 
             //Change behavior based on threat level
@@ -105,7 +111,33 @@ public class SharkController : MonoBehaviour
 
     private void SmoothLookAt(Quaternion targetRotation)
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookAtSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, currentLookAtSpeed * Time.deltaTime);
+    }
+
+
+    private void CheckLookAtTarget(Quaternion targetRotation)
+    {
+        //If the degree between the current rotation and the target rotation is less than 5 degrees, they have looked at their target
+        if (Quaternion.Angle(transform.rotation, targetRotation) < 5)
+        {
+            //If the shark is looking at its target, rotate slowly if position updates
+            currentLookAtSpeed = targetLookedAtSpeed;
+            currentRotSpeed = lookingAtTargetRotSpeed;
+        }
+        else
+        {
+            currentLookAtSpeed = lookAtSpeed;
+            //Change rotation speed based on threat level
+            switch (currentThreatLevel)
+            {
+                case ThreatLevel.THREATENED:
+                    currentRotSpeed = threatenedRotSpeed;
+                    break;
+                default:
+                    currentRotSpeed = rotSpeed;
+                    break;
+            }
+        }
     }
 
     private void WanderBehavior()
@@ -134,7 +166,6 @@ public class SharkController : MonoBehaviour
         if (!playerLockedOn)
         {
             currentSpeed = threatSpeed;
-            currentRotSpeed = threatenedRotSpeed;
             BeginThreat();
             playerLockedOn = true;
 
@@ -206,7 +237,7 @@ public class SharkController : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, LayerMask.GetMask("Player"));
         if(hitColliders.Length != 0  && currentThreatLevel != ThreatLevel.THREATENED)
         {
-            Debug.Log("Player Is Too Close!");
+            //Debug.Log("Player Is Too Close!");
             isInSensor = true;
             //Start the alarm raising coroutine if it has not been activated
             if (!alarmStarted)
@@ -280,16 +311,16 @@ public class SharkController : MonoBehaviour
         switch (currentThreatLevel)
         {
             case ThreatLevel.WANDERING:
-                Debug.Log("Threat Level: Wandering");
+                //Debug.Log("Threat Level: Wandering");
                 RemoveThreatSettings();
                 break;
             case ThreatLevel.INTEREST:
-                Debug.Log("Threat Level: Interested");
+                //Debug.Log("Threat Level: Interested");
                 DestroyAllNodes();
                 RemoveThreatSettings();
                 break;
             case ThreatLevel.THREATENED:
-                Debug.Log("Threat Level: Threatened");
+                //Debug.Log("Threat Level: Threatened");
                 break;
         }
 

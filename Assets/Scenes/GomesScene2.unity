@@ -1421,7 +1421,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: lookAtSpeed
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: threatSpeed
@@ -1434,6 +1434,14 @@ PrefabInstance:
     - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: threatenedCooldown
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
+      propertyPath: threatenedRotSpeed
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
+      propertyPath: targetLookedAtSpeed
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678111, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: m_RootOrder

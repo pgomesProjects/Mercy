@@ -57,7 +57,7 @@ public class FieldOfView : MonoBehaviour
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
                     canSeePlayer = false;
-                    Debug.Log("Player Is In Blindspot!");
+                    //Debug.Log("Player Is In Blindspot!");
                 }
             }
             //If the target is in the sight range, they can see the player
@@ -72,7 +72,7 @@ public class FieldOfView : MonoBehaviour
                     StopCoroutine(sharkObject.raiseAlarmCoroutine);
                     StopCoroutine(sharkObject.threatenedCooldownCoroutine);
                     sharkObject.SetThreatLevel(SharkController.ThreatLevel.THREATENED);
-                    Debug.Log("Shark Can See Player!");
+                    //Debug.Log("Shark Can See Player!");
                 }
                 else
                     canSeePlayer = false;
@@ -84,7 +84,7 @@ public class FieldOfView : MonoBehaviour
         else if (canSeePlayer)
         {
             canSeePlayer = false;
-            Debug.Log("Shark Lost Sight Of Player!");
+            //Debug.Log("Shark Lost Sight Of Player!");
             sharkObject.ResetThreatenedCooldown();
             StartCoroutine(sharkObject.threatenedCooldownCoroutine);
         }
