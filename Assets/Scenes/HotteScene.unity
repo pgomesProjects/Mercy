@@ -470,6 +470,10 @@ PrefabInstance:
       propertyPath: entryTarget
       value: 
       objectReference: {fileID: 1261266776}
+    - target: {fileID: 4019931900530741527, guid: 46efdf43b45fa1746b51ab2627fcf029, type: 3}
+      propertyPath: exitIndicatorText
+      value: 
+      objectReference: {fileID: 6038098376343361555}
     - target: {fileID: 7429209488335980918, guid: 46efdf43b45fa1746b51ab2627fcf029, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1749,6 +1753,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2898423995548669643, guid: 63809936b98aba54392485c3f34e7885, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6038098376104873587, guid: 63809936b98aba54392485c3f34e7885, type: 3}
       propertyPath: m_Name
       value: PlayerUICanvas
@@ -1839,3 +1847,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63809936b98aba54392485c3f34e7885, type: 3}
+--- !u!1 &6038098376343361555 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 488800602919247628, guid: 63809936b98aba54392485c3f34e7885, type: 3}
+  m_PrefabInstance: {fileID: 6038098376343361554}
+  m_PrefabAsset: {fileID: 0}

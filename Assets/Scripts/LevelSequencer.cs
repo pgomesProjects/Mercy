@@ -203,8 +203,15 @@ public class LevelSequencer : MonoBehaviour
                 //Update sequencer:
                 sequenceTime = exitTime;                              //Set timer to begin exit sequence
                 cageTargPos = CageController.main.transform.position; //Get current position of cage to lerp from
+                CageController.main.HideIndicator();                  //Remove the exit indicator
                 break;
             case LevelPhase.Exit: //Transition from Exit to next scene
+                //If the AudioManager is in the scene, stop the in-game music
+                if (FindObjectOfType<AudioManager>() != null)
+                {
+                    FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);
+                    LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel);
+                }
                 SceneManager.LoadScene(exitScene); //Load exit scene
                 break;
             default:

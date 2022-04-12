@@ -36,6 +36,9 @@ public class CageController : MonoBehaviour
     public delegate void OnPlayerEntersCage(); public static OnPlayerEntersCage playerEntersCageDelegate;
     public delegate void OnPlayerLeavesCage(); public static OnPlayerLeavesCage playerLeavesCageDelegate;
 
+    [Header("UI:")]
+    [SerializeField] [Tooltip("The UI that tells the player when they can leave the game.")] private GameObject exitIndicatorText;
+
     //RUNTIME METHODS:
     private void Awake()
     {
@@ -118,6 +121,12 @@ public class CageController : MonoBehaviour
         playerInside = true;        //Indicate that player is inside the cage
         playerEntersCageDelegate(); //Call player cage entry delegates
         Debug.Log("Player has entered dive cage");
+
+        //If the player meets the conditions to leave, show the indicator
+        if(playerInside == true && LevelSequencer.main.phase == LevelPhase.Hunt)
+        {
+            exitIndicatorText.SetActive(true);
+        }
     }
     /// <summary>
     /// Call when player leaves the dive cage.
@@ -128,6 +137,17 @@ public class CageController : MonoBehaviour
         playerInside = false;       //Indicate that player is not inside the cage
         playerLeavesCageDelegate(); //Call player cage exit delegates
         Debug.Log("Player has left dive cage");
+
+        //If the exit indicator is active, deactivate it
+        if (exitIndicatorText.activeInHierarchy)
+        {
+            exitIndicatorText.SetActive(false);
+        }
+    }
+
+    public void HideIndicator()
+    {
+        exitIndicatorText.SetActive(false);
     }
 
     //FUNCTIONALITY METHODS:
