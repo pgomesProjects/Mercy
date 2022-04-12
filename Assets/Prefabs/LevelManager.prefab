@@ -111,3 +111,47 @@ MonoBehaviour:
   entryFadeTime: 4
   graceEndDistance: 170
   maxGraceTime: 10
+  exitTime: 2.4
+  cageAscendCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 65
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.3
+      value: 0
+      inSlope: -0
+      outSlope: -0.009837022
+      tangentMode: 5
+      weightedMode: 2
+      inWeight: 0.33333334
+      outWeight: 0.60184073
+    - serializedVersion: 3
+      time: 0.48835027
+      value: -0.10403477
+      inSlope: 0.0131494105
+      outSlope: 0.0131494105
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.65270716
+      outWeight: 0.17624205
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3.718183
+      outSlope: 3.718183
+      tangentMode: 0
+      weightedMode: 1
+      inWeight: 0.16525133
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  exitScene: Victory

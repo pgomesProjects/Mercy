@@ -1197,6 +1197,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1838463858}
     - target: {fileID: 3845428981221293299, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: cageDescendTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293299, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
       propertyPath: cageDescendTarget
       value: 
       objectReference: {fileID: 1261266776}
