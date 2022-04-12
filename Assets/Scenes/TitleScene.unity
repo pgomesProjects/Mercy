@@ -2676,7 +2676,7 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
   - name: GameOverSFX
-    clip: {fileID: 8300000, guid: 4df2c42a994e2544a856351054025c3b, type: 3}
+    clip: {fileID: 8300000, guid: ea34a3e47bfc30448b00ff50427222e9, type: 3}
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -2694,6 +2694,11 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 7069a6a7524de774e9b40be28f61ee3d, type: 3}
     pitch: 1
     loop: 1
+    source: {fileID: 0}
+  - name: VictorySFX
+    clip: {fileID: 8300000, guid: 7069a6a7524de774e9b40be28f61ee3d, type: 3}
+    pitch: 1
+    loop: 0
     source: {fileID: 0}
 --- !u!1 &1044891802
 GameObject:
@@ -5724,7 +5729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c66d3b9ace8e3834c96654f5b9ff95c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelToLoad: GomesScene2
+  levelToLoad: HotteScene
   menuStates:
   - {fileID: 1652360676}
   - {fileID: 1853060476}
