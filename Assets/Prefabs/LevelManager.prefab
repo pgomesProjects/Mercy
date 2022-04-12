@@ -65,7 +65,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cageDescendTarget: {fileID: 0}
   blackoutScreen: {fileID: 0}
-  cageDescendTime: 15
+  cageDescendTime: 16
   cageDescendCurve:
     serializedVersion: 2
     m_Curve:

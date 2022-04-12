@@ -1,18 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class VictoryScreenManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] [Tooltip("Level which will be loaded if player chooses to continue")] private string reloadLevel;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //INPUT METH:
+    public void OnRestart() { SceneManager.LoadScene(reloadLevel); }
+    public void OnQuit() { Application.Quit(); }
 }
