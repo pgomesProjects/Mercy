@@ -34,6 +34,7 @@ public class SettingsOnStart : MonoBehaviour
         GameManager.instance.playingSongName = "Titlescreen";
 
         SetUpFullscreen();
+        SetUpVSync();
         SetUpVolume();
         SetUpSensitivity();
         SetUpResolution();
@@ -48,6 +49,7 @@ public class SettingsOnStart : MonoBehaviour
         settingsController.GetVolumeSliders()[1].value = PlayerPrefs.GetFloat("SFXVolume") * 10;
         settingsController.GetSensitivitySlider().value = PlayerPrefs.GetFloat("MouseSensitivity") * 100;
         settingsController.GetFullScreenToggle().isOn = GameManager.instance.currentSettings.GetIsFullScreen();
+        settingsController.GetVSyncEnabledToggle().isOn = GameManager.instance.currentSettings.GetVSyncEnabled();
         settingsController.GetSettingsDropdowns()[0].value = (int)GameManager.instance.currentSettings.GetCurrentResolution();
         settingsController.GetSettingsDropdowns()[0].RefreshShownValue();
         settingsController.GetSettingsDropdowns()[1].value = (int)GameManager.instance.currentSettings.GetGraphicsQuality();
@@ -74,6 +76,16 @@ public class SettingsOnStart : MonoBehaviour
         else
             settingsController.GetFullScreenToggle().isOn = false;
     }//end of SetUpFullscreen
+
+    private void SetUpVSync()
+    {
+        QualitySettings.vSyncCount = PlayerPrefs.GetInt("VSyncEnabled");
+        GameManager.instance.currentSettings.SetVSyncEnabled(PlayerPrefs.GetInt("VSyncEnabled") == 1);
+        if (GameManager.instance.currentSettings.GetVSyncEnabled())
+            settingsController.GetVSyncEnabledToggle().isOn = true;
+        else
+            settingsController.GetVSyncEnabledToggle().isOn = false;
+    }//end of SetUpVSync
 
     private void SetUpVolume()
     {

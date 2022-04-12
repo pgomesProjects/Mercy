@@ -163,9 +163,10 @@ MonoBehaviour:
   lookSensitivity: {x: 0.15, y: 0.15}
   lookDamping: 0.2
   verticalLookLimits: {x: -75, y: 74}
-  playerHealth: 1
   playerScore: 0
-  interestedAreaBox: {x: 200, y: 200, z: 200}
+  interestedAreaBox: {x: 200, y: 15, z: 200}
+  playerCam: {fileID: 1130405230100577287}
+  playerViewingDistance: 370
 --- !u!114 &1130405230645989019
 MonoBehaviour:
   m_ObjectHideFlags: 0

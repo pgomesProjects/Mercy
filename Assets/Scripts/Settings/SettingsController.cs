@@ -8,7 +8,7 @@ public class SettingsController : MonoBehaviour
 {
     [SerializeField] private Slider[] volumeSliders;
     [SerializeField] private Slider sensitivitySlider;
-    [SerializeField] private Toggle fullScreenToggle;
+    [SerializeField] private Toggle[] toggleButtons;
     [SerializeField] private TMP_Dropdown [] settingsDropdowns;
     [HideInInspector]
     public int[,] possibleResolutions = new int[,] { { 2560, 1440 }, { 1920, 1080 }, { 1280, 720 } };
@@ -51,6 +51,25 @@ public class SettingsController : MonoBehaviour
         }
     }//end of FullScreenToggle
 
+    public void VSyncEnabledToggle(bool isVSyncEnabled)
+    {
+        //Toggle vsync variable
+        GameManager.instance.currentSettings.SetVSyncEnabled(isVSyncEnabled);
+
+        if (GameManager.instance.currentSettings.GetVSyncEnabled())
+        {
+            Debug.Log("VSync Enabled");
+            PlayerPrefs.SetInt("VSyncEnabled", 1);
+            QualitySettings.vSyncCount = 1;
+        }
+        else
+        {
+            Debug.Log("VSync Disabled");
+            PlayerPrefs.SetInt("VSyncEnabled", 0);
+            QualitySettings.vSyncCount = 0;
+        }
+    }//end of VSyncEnabledToggle
+
     public void ResolutionDropdownChange(int resIndex)
     {
         GameManager.instance.currentSettings.SetCurrentResolution((GameSettings.Resolution)resIndex);
@@ -69,6 +88,7 @@ public class SettingsController : MonoBehaviour
 
     public Slider[] GetVolumeSliders() { return volumeSliders; }
     public Slider GetSensitivitySlider() { return sensitivitySlider; }
-    public Toggle GetFullScreenToggle() { return fullScreenToggle; }
+    public Toggle GetFullScreenToggle() { return toggleButtons[0]; }
+    public Toggle GetVSyncEnabledToggle() { return toggleButtons[1]; }
     public TMP_Dropdown [] GetSettingsDropdowns() { return settingsDropdowns; }
 }

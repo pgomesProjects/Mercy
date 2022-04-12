@@ -236,11 +236,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!20 &268418793 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 1130405230100577287, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
-  m_PrefabInstance: {fileID: 1338180705}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &442291353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1217,25 +1212,9 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 1130405230100577280, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1130405230645989013, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 1130405230645989016, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
-      propertyPath: playerCam
-      value: 
-      objectReference: {fileID: 268418793}
-    - target: {fileID: 1130405230645989016, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
-      propertyPath: interestedAreaBox.y
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1130405230645989016, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
-      propertyPath: playerViewingDistance
-      value: 370
       objectReference: {fileID: 0}
     - target: {fileID: 1130405230645989017, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
       propertyPath: m_RootOrder
