@@ -7,16 +7,35 @@ public class VictoryScreenManager : MonoBehaviour
 {
     [SerializeField] [Tooltip("Level which will be loaded if player chooses to continue")] private string reloadLevel;
 
+    private AudioManager audioManager;
+
     private void Start()
     {
-        if (FindObjectOfType<AudioManager>() != null)
+        audioManager = FindObjectOfType<AudioManager>();
+        if (audioManager != null)
         {
             GameManager.instance.playingSongName = "VictorySFX";
-            FindObjectOfType<AudioManager>().Play(GameManager.instance.playingSongName, PlayerPrefs.GetFloat("SFXVolume"));
+            audioManager.Play(GameManager.instance.playingSongName, PlayerPrefs.GetFloat("SFXVolume"));
         }
     }
 
     //INPUT METH:
-    public void OnRestart() { SceneManager.LoadScene(reloadLevel); }
-    public void OnQuit() { Application.Quit(); }
+    public void OnRestart()
+    {
+        if (audioManager != null)
+        {
+            if (audioManager.IsPlaying(GameManager.instance.playingSongName))
+            {
+                audioManager.Stop(GameManager.instance.playingSongName);
+            }
+        }
+        SceneManager.LoadScene(reloadLevel);
+    }
+    public void OnQuit()
+    {
+        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
 }

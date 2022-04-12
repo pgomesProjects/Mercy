@@ -2696,7 +2696,7 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
   - name: VictorySFX
-    clip: {fileID: 8300000, guid: 7069a6a7524de774e9b40be28f61ee3d, type: 3}
+    clip: {fileID: 8300000, guid: c1a4767f1a2fb0c49aa5045fc4d0fa74, type: 3}
     pitch: 1
     loop: 0
     source: {fileID: 0}
