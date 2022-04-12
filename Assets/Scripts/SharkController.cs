@@ -52,9 +52,14 @@ public class SharkController : MonoBehaviour
     [HideInInspector]
     public enum ThreatLevel { WANDERING, INTEREST, THREATENED }
     public ThreatLevel currentThreatLevel;
+    public static SharkController main;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
+    {
+        if (main == null) { main = this; } else { Destroy(gameObject); } //Singleton-ize
+    }
+    void OnEnable()
     {
         isMoving = true;
         alarmStarted = false;

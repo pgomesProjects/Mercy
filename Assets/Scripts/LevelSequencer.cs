@@ -67,6 +67,7 @@ public class LevelSequencer : MonoBehaviour
 
         //Entry sequence prep:
         StartCoroutine(FadePlayerInOut(entryFadeTime, true)); //Begin fading in player senses
+        SharkController.main.gameObject.SetActive(false);     //Deactivate the shark
     }
     private void Update()
     {
@@ -179,7 +180,7 @@ public class LevelSequencer : MonoBehaviour
                 break;
             case LevelPhase.GracePeriod: phase = LevelPhase.Hunt; //Transition from Grace Period to Hunt
                 //External activations:
-
+                SharkController.main.gameObject.SetActive(true); //Activate the shark
                 //Update sequencer:
 
                 break;
