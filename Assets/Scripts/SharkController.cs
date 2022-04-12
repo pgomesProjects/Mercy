@@ -44,7 +44,8 @@ public class SharkController : MonoBehaviour
 
     private bool nodeGenerated = false;
     private bool playerLockedOn;
-    private bool isMoving, isInSensor, alarmStarted;
+    internal bool canMove = true;
+    private bool isInSensor, alarmStarted;
     private float currentAlarmTimer;
 
     internal IEnumerator raiseAlarmCoroutine, threatenedCooldownCoroutine, dashCoroutine, playerNodeSpawnCoroutine;
@@ -59,9 +60,8 @@ public class SharkController : MonoBehaviour
     {
         if (main == null) { main = this; } else { Destroy(gameObject); } //Singleton-ize
     }
-    void OnEnable()
+    void Start()
     {
-        isMoving = true;
         alarmStarted = false;
         currentSpeed = speed;
         currentRotSpeed = rotSpeed;
@@ -79,7 +79,7 @@ public class SharkController : MonoBehaviour
     void Update()
     {
         //If the shark is moving
-        if (isMoving)
+        if (canMove)
         {
             //Check attack sensor before everything
             CheckAttackSensor();
