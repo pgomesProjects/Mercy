@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CustomEnums;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace CustomEnums
 {
@@ -28,11 +29,15 @@ public class LevelSequencer : MonoBehaviour
     //Settings:
     [Header("Entry Sequence Settings:")]
     [SerializeField] [Tooltip("Time cage takes to lower from starting position to target position (at which point entry sequence ends)")] private float cageDescendTime;
-    [SerializeField] [Tooltip("Curve describing movement of dive cage (toward target) throughout entry sequence")]                        private AnimationCurve cageDescendCurve;
+    [SerializeField] [Tooltip("Describes movement of dive cage (toward target) throughout entry sequence")]                               private AnimationCurve cageDescendCurve;
     [SerializeField] [Tooltip("How long it takes for player vision/hearing to fade in when entering level")]                              private float entryFadeTime;
     [Header("Grace Period Sequence Settings:")]
     [SerializeField] [Tooltip("Max distance from cage player may travel before grace period ends")]            private float graceEndDistance;
     [SerializeField] [Tooltip("Max time (in seconds) before shark begins hunting (after player leaves cage)")] private float maxGraceTime;
+    [Header("Exit Sequence Settings:")]
+    [SerializeField] [Tooltip("Duration (in seconds) of exit sequence")]                                   private float exitTime;
+    [SerializeField] [Tooltip("Describes movement of dive cage (toward origin) throughout exit sequence")] private AnimationCurve cageAscendCurve;
+    [SerializeField] [Tooltip("Name of scene loaded at end of exit sequence")]                             private string exitScene;
 
     //Runtime Vars:
     /// <summary>Level's current sequence.</summary>
@@ -40,6 +45,7 @@ public class LevelSequencer : MonoBehaviour
 
     private float sequenceTime = 0; //Time (in seconds) remaining in current sequence.  Zero if timer is not in use
     private Vector3 cageOrigPos;    //Original position of dive cage
+    private Vector3 cageTargPos;    //Current target position for dive cage
 
     //RUNTIME METHODS:
     private void Awake()
@@ -64,6 +70,7 @@ public class LevelSequencer : MonoBehaviour
         //Set starting variables:
         sequenceTime = cageDescendTime;                       //Set initial sequence time to cage descend time (beginning first phase)
         cageOrigPos = CageController.main.transform.position; //Get starting position of dive cage
+        cageTargPos = cageDescendTarget.transform.position;   //Get starting target for dive cage
 
         //Entry sequence prep:
         StartCoroutine(FadePlayerInOut(entryFadeTime, true)); //Begin fading in player senses
@@ -81,10 +88,10 @@ public class LevelSequencer : MonoBehaviour
         //Phase-specific updates:
         switch (phase) //Determine behavior based on current phase
         {
-            case LevelPhase.Entry: //Level entry sequence updates
+            case LevelPhase.Entry: //Entry sequence updates
                 //Move dive cage:
                 float t = 1 - cageDescendCurve.Evaluate(1 - (sequenceTime / cageDescendTime)); //Get interpolant value as sequence time applied to entry curve (use inversion fuckery to make curve make sense)
-                Vector3 newPos = Vector3.Lerp(cageOrigPos, cageDescendTarget.position, t);     //Interpolate between cage's original position and cage's position target to get new position
+                Vector3 newPos = Vector3.LerpUnclamped(cageOrigPos, cageTargPos, t);           //Interpolate between cage's original position and cage's position target to get new position
                 CageController.main.transform.position = newPos;                               //Move cage to new position
                 break;
             case LevelPhase.GracePeriod: //Grace period updates
@@ -92,6 +99,11 @@ public class LevelSequencer : MonoBehaviour
                 {
                     ProgressSequence(); //Begin next sequence
                 }
+                break;
+            case LevelPhase.Exit: //Exit sequence updates
+                float t2 = cageAscendCurve.Evaluate(1 - (sequenceTime / exitTime));    //Get interpolant value as sequence time applied to exit curve
+                Vector3 newPos2 = Vector3.LerpUnclamped(cageTargPos, cageOrigPos, t2); //Interpolate between cage's end position and origin to get new position
+                CageController.main.transform.position = newPos2;                      //Move cage to new position
                 break;
             default: break;
         }
@@ -186,10 +198,14 @@ public class LevelSequencer : MonoBehaviour
                 break;
             case LevelPhase.Hunt: phase = LevelPhase.Exit; //Transition from Hunt to Exit
                 //External activations:
-                CageController.main.ToggleDoor(false); //Close cage door (trapping player in cage
-
+                CageController.main.CapturePlayer();                              //Trap player in cage
+                CageController.main.GetComponent<FloatBob>().EndImmediate(false); //End cage bobbing animation
                 //Update sequencer:
-
+                sequenceTime = exitTime;                              //Set timer to begin exit sequence
+                cageTargPos = CageController.main.transform.position; //Get current position of cage to lerp from
+                break;
+            case LevelPhase.Exit: //Transition from Exit to next scene
+                SceneManager.LoadScene(exitScene); //Load exit scene
                 break;
             default:
                 break;

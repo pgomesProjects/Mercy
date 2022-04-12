@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using CustomEnums;
 
 /// <summary>
@@ -17,8 +16,6 @@ public class CageController : MonoBehaviour
     private Collider interiorVolume;   //Collider used to determine whether or not player is inside cage
 
     //Settings:
-    [Header("General Settings:")]
-    [SerializeField] [Tooltip("Name of scene that plays when player escapes")] private string exitScene;
     [Header("Door Animation Settings:")]
     [SerializeField] [Tooltip("Max angle door can open to")]                                                       private float doorOpenAngle;
     [SerializeField] [Tooltip("How fast the cage door opens and closes")]                                          private float doorSpeed;
@@ -79,14 +76,16 @@ public class CageController : MonoBehaviour
     //PHYSICS METHODS:
     private void OnTriggerEnter(Collider other)
     {
-        if (LevelSequencer.main.phase == LevelPhase.Hunt) //Game is in hunt phase
+        if (LevelSequencer.main.phase == LevelPhase.Hunt ||      //Game is in hunt phase
+            LevelSequencer.main.phase == LevelPhase.GracePeriod) //Game is in grace period
         {
             if (other.CompareTag("Player")) ToggleDoor(true); //Open door when player enters proximity
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (LevelSequencer.main.phase == LevelPhase.Hunt) //Game is in hunt phase
+        if (LevelSequencer.main.phase == LevelPhase.Hunt ||      //Game is in hunt phase
+            LevelSequencer.main.phase == LevelPhase.GracePeriod) //Game is in grace period
         {
             if (other.CompareTag("Player")) ToggleDoor(false); //Close door when player leaves proximity
         }
@@ -100,6 +99,15 @@ public class CageController : MonoBehaviour
     {
         PlayerController.main.transform.parent = null; //Unchild player from cage
         ToggleDoor(true);                              //Open cage door
+    }
+    /// <summary>
+    /// Traps player in cage at end of game.
+    /// </summary>
+    public void CapturePlayer()
+    {
+        PlayerController.main.transform.parent = transform; //Child player to cage transform
+        doorSpeed = doorSlamSpeed;                          //Make door close really fast
+        ToggleDoor(false);                                  //Close cage door
     }
     /// <summary>
     /// Call when player enters the dive cage.

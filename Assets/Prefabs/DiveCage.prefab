@@ -267,10 +267,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exitScene: GameOver
-  entryTarget: {fileID: 0}
   doorOpenAngle: -110
   doorSpeed: 0.06
-  doorSlamSpeed: 0.1
+  doorSlamSpeed: 0.3
   doorOpenSound: {fileID: 0}
   doorCloseSound: {fileID: 0}
   doorSlamSound: {fileID: 0}
