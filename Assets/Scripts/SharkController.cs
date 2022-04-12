@@ -20,9 +20,9 @@ public class SharkController : MonoBehaviour
 
     [Header("Shark Attack Values")]
     [SerializeField] private float attackRadius = 5; //The radius in front of the shark where the player is attacked in
-    [SerializeField] private float initialAttackPower = 5; //The amount of damage the shark initially deals
-    [SerializeField] private float currentAttackPower; //The amount of damage the shark currently deals
-    [SerializeField] private float attackMultiplier = 1.25f; //The longer the player is being damaged by the shark, the more damage is dealt
+    //[SerializeField] private float initialAttackPower = 5; //The amount of damage the shark initially deals
+    //[SerializeField] private float currentAttackPower; //The amount of damage the shark currently deals
+    //[SerializeField] private float attackMultiplier = 1.25f; //The longer the player is being damaged by the shark, the more damage is dealt
 
     [SerializeField] private float detectionRadius = 60;
 
@@ -78,6 +78,12 @@ public class SharkController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (IsSharkVisibleFromCamera() 
+            && Vector3.Distance(PlayerController.main.transform.position, transform.position) < PlayerController.main.playerViewingDistance)
+        {
+            Debug.Log("Player Can See Shark! Holy Heck!");
+        }
+
         //If the shark is moving
         if (canMove)
         {
@@ -112,6 +118,22 @@ public class SharkController : MonoBehaviour
         }
 
         Debug.DrawLine(PlayerController.main.transform.position, transform.position, Color.cyan);
+    }
+
+    private bool IsSharkVisibleFromCamera()
+    {
+        var planes = GeometryUtility.CalculateFrustumPlanes(PlayerController.main.playerCam);
+        var point = transform.position;
+
+        foreach(var plane in planes)
+        {
+            if(plane.GetDistanceToPoint(point) < 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void SmoothLookAt(Quaternion targetRotation)

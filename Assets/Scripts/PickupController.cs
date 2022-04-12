@@ -5,6 +5,7 @@ using UnityEngine;
 public class PickupController : MonoBehaviour
 {
     [SerializeField] private int scoreValue;
+    [SerializeField] private float massInPounds;
 
     private bool canBeCollected;
     private Light selectionLight;

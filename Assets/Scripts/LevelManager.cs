@@ -16,6 +16,7 @@ public class LevelManager : MonoBehaviour
     public bool isGameOver;
 
     private AudioManager audioManager;
+
     private void Awake()
     {
         main = this;

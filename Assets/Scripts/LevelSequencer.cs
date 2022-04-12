@@ -213,6 +213,7 @@ public class LevelSequencer : MonoBehaviour
                     FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);     //Stop audio manager
                     LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel); //Stop level music
                 }
+                GameManager.instance.finalScore = PlayerController.main.playerScore;
                 Cursor.visible = true;             //Make cursor visible
                 SceneManager.LoadScene(exitScene); //Load exit scene
                 break;

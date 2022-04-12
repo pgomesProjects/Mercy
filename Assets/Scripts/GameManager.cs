@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameSettings currentSettings = new GameSettings();
 
+    [HideInInspector] public int finalScore;
     [HideInInspector]
     public string playingSongName = "";
 
