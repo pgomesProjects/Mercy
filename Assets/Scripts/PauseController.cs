@@ -40,6 +40,7 @@ public class PauseController : MonoBehaviour
 
         if (isPaused)
         {
+            Cursor.visible = true;
             Time.timeScale = 0;
             if(FindObjectOfType<AudioManager>() != null)
             {
@@ -48,6 +49,7 @@ public class PauseController : MonoBehaviour
         }
         else
         {
+            Cursor.visible = false;
             Time.timeScale = 1;
             if (FindObjectOfType<AudioManager>() != null)
             {

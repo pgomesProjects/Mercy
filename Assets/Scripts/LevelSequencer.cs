@@ -75,6 +75,7 @@ public class LevelSequencer : MonoBehaviour
         //Entry sequence prep:
         StartCoroutine(FadePlayerInOut(entryFadeTime, true)); //Begin fading in player senses
         SharkController.main.canMove = false;                 //Make sure the shark can't move
+        Cursor.visible = false;                               //Make cursor invisible
     }
     private void Update()
     {
@@ -177,7 +178,7 @@ public class LevelSequencer : MonoBehaviour
     public void ProgressSequence()
     {
         //Initial stuff:
-        sequenceTime = 0;                         //Reset sequence time by default when starting a new sequence
+        sequenceTime = 0; //Reset sequence time by default when starting a new sequence
 
         //Phase transition behavior:
         switch (phase) //Determine what to do next based on current phase
@@ -206,12 +207,13 @@ public class LevelSequencer : MonoBehaviour
                 CageController.main.HideIndicator();                  //Remove the exit indicator
                 break;
             case LevelPhase.Exit: //Transition from Exit to next scene
-                //If the AudioManager is in the scene, stop the in-game music
-                if (FindObjectOfType<AudioManager>() != null)
+                //Scene cleanup:
+                if (FindObjectOfType<AudioManager>() != null) //Scene has audio manager
                 {
-                    FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);
-                    LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel);
+                    FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);     //Stop audio manager
+                    LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel); //Stop level music
                 }
+                Cursor.visible = true;             //Make cursor visible
                 SceneManager.LoadScene(exitScene); //Load exit scene
                 break;
             default:

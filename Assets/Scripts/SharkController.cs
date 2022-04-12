@@ -231,6 +231,7 @@ public class SharkController : MonoBehaviour
             Debug.Log("Player Has Been Attacked! Game Over!");
 
             //Stop the current threat music
+            Cursor.visible = true;
             LevelManager.main.StopThreatMusic((int)currentThreatLevel);
             LevelManager.main.GameOver();
         }
