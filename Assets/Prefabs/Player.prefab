@@ -165,6 +165,7 @@ MonoBehaviour:
   verticalLookLimits: {x: -75, y: 74}
   playerHealth: 1
   playerScore: 0
+  interestedAreaBox: {x: 200, y: 200, z: 200}
 --- !u!114 &1130405230645989019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,7 +296,19 @@ MonoBehaviour:
     m_ActionId: d07c4658-ccaa-4fc3-b673-caa4cdbc44a5
     m_ActionName: Player/Dash[/Keyboard/leftShift]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1130405230645989016}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnPickUp
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 08e020a6-70b4-45df-bad6-2d3d0e4f2f0f
     m_ActionName: Player/PickUp[/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0

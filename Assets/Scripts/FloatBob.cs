@@ -27,7 +27,7 @@ public class FloatBob : MonoBehaviour
     private void Start()
     {
         //Initialization:
-        Initialize(); //Perform initialization
+        Initialize(bobbing); //Perform initialization (preserve selected onAwake behavior)
     }
     private void Update()
     {
@@ -72,9 +72,11 @@ public class FloatBob : MonoBehaviour
     /// <summary>
     /// Initializes bob animation (call this if object has been moved).
     /// </summary>
-    public void Initialize()
+    /// <param name="enable">Pass true to enable bob, false to disable it.</param>
+    public void Initialize(bool enable)
     {
         origY = transform.position.y; //Record Y position
         timeSinceBob = 0;             //Reset bob time (needed for re-initialization)
+        Toggle(enable);               //Enable/disable bob upon initialization
     }
 }

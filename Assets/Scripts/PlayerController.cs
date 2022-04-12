@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using CustomEnums;
 
 /// <summary>
 /// Processes player input and movement functionality.
@@ -15,7 +16,7 @@ public class PlayerController : MonoBehaviour
     //Objects & Components:
     public static PlayerController main; //Singleton instance of playercontroller
     private PlayerInput playerInput;     //Script handling player input events
-    private Rigidbody rb;                //Player rigidbody component
+    internal Rigidbody rb;               //Player rigidbody component
 
     //Settings:
     [Header("Swimming:")]
@@ -132,6 +133,15 @@ public class PlayerController : MonoBehaviour
     public void OnDash(InputAction.CallbackContext context)
     {
         
+    }
+    public void OnPickUp(InputAction.CallbackContext context)
+    {
+        //Check for game end:
+        if (CageController.main.playerInside &&           //Player is inside cage
+            LevelSequencer.main.phase == LevelPhase.Hunt) //Game is in Hunt phase
+        {
+            LevelSequencer.main.ProgressSequence(); //Progress game sequence
+        }
     }
 
 #if UNITY_EDITOR
