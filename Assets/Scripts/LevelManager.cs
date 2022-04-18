@@ -48,8 +48,8 @@ public class LevelManager : MonoBehaviour
     {
         if (audioManager != null)
         {
-            Debug.Log("Starting Heartbeat" + (level + 1));
-            FindObjectOfType<AudioManager>().Play("Heartbeat" + (level + 1), PlayerPrefs.GetFloat("SFXVolume"));
+            Debug.Log("Starting Heartbeat" + level);
+            FindObjectOfType<AudioManager>().Play("Heartbeat" + level, PlayerPrefs.GetFloat("SFXVolume"));
         }
     }
 
@@ -57,7 +57,7 @@ public class LevelManager : MonoBehaviour
     {
         if (audioManager != null)
         {
-            FindObjectOfType<AudioManager>().Stop("Heartbeat" + (level + 1));
+            FindObjectOfType<AudioManager>().Stop("Heartbeat" + level);
         }
     }
 

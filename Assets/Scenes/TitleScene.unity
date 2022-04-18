@@ -2912,6 +2912,11 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: Heartbeat0
+    clip: {fileID: 8300000, guid: 90a4ae97e09d703458fbba3e9f04d829, type: 3}
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
   - name: Heartbeat1
     clip: {fileID: 8300000, guid: 90a4ae97e09d703458fbba3e9f04d829, type: 3}
     pitch: 1
@@ -2923,6 +2928,11 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
   - name: Heartbeat3
+    clip: {fileID: 8300000, guid: 7069a6a7524de774e9b40be28f61ee3d, type: 3}
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Heartbeat4
     clip: {fileID: 8300000, guid: 7069a6a7524de774e9b40be28f61ee3d, type: 3}
     pitch: 1
     loop: 1

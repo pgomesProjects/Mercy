@@ -103,6 +103,7 @@ public class CageController : MonoBehaviour
         PlayerController.main.transform.parent = null; //Unchild player from cage
         ToggleDoor(true);                              //Open cage door
     }
+
     /// <summary>
     /// Traps player in cage at end of game.
     /// </summary>

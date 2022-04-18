@@ -25,6 +25,7 @@ public class LevelSequencer : MonoBehaviour
     [Header("Local Scene Components:")]
     [SerializeField] [Tooltip("Position which dive cage will move toward during entry sequence")] private Transform cageDescendTarget;
     [SerializeField] [Tooltip("Image used to block player's view when necessary")]                private Image blackoutScreen;
+    [SerializeField][Tooltip("CanvasGroup used to show / hide the player's HUD")]                 private CanvasGroup playerIndicator;
 
     //Settings:
     [Header("Entry Sequence Settings:")]
@@ -171,6 +172,32 @@ public class LevelSequencer : MonoBehaviour
         else newColor.a = 1;          //Make screen fully opaque if fading out
     }
 
+    /// <summary>
+    /// Fades player indicator in or out in a certain number of seconds.
+    /// </summary>
+    /// <param name="fadeTime">How long fade will take (in seconds)</param>
+    /// <param name="fadeType">Whether to fade in (TRUE) or out (FALSE)</param>
+    /// <returns></returns>
+    IEnumerator FadeIndicatorInOut(float fadeTime, bool fadeType)
+    {
+        //Initialize:
+        float startingAlpha = playerIndicator.alpha;
+
+        //Fade process:
+        for (float timePassed = 0; timePassed < fadeTime; timePassed += Time.deltaTime) //Run this code every frame for fadeTime seconds
+        {
+            float fadeAmount = timePassed / fadeTime;  //Get interpolant value based on time pased to use with indicator blocker
+            if (fadeType) fadeAmount = 1 - fadeAmount; //Reverse fade amount when fading in (make indicator more transparent as time progresses)
+            startingAlpha = fadeAmount;                   //Set new alpha for indicator
+            playerIndicator.alpha = startingAlpha;           //Apply new alpha
+            yield return null;                         //Wait until next frame
+        }
+
+        //Finish fade:
+        if (fadeType) playerIndicator.alpha = 0; //Make indicator fully transparent if fading in
+        else playerIndicator.alpha = 1;          //Make indicator fully opaque if fading out
+    }
+
     //SEQUENCE METHODS:
     /// <summary>
     /// Progresses game sequence from current phase to next in order.
@@ -189,7 +216,7 @@ public class LevelSequencer : MonoBehaviour
                 CageController.main.ReleasePlayer();                                 //Release player from dive cage
                 CageController.main.GetComponent<FloatBob>().Initialize(true);       //Re-initialize and enable cage bob
                 //Update sequencer:
-
+                StartCoroutine(FadeIndicatorInOut(0.25f, false));
                 break;
             case LevelPhase.GracePeriod: phase = LevelPhase.Hunt; //Transition from Grace Period to Hunt
                 //External activations:
@@ -205,6 +232,7 @@ public class LevelSequencer : MonoBehaviour
                 sequenceTime = exitTime;                              //Set timer to begin exit sequence
                 cageTargPos = CageController.main.transform.position; //Get current position of cage to lerp from
                 CageController.main.HideIndicator();                  //Remove the exit indicator
+                StartCoroutine(FadeIndicatorInOut(0.25f, true));     //Remove the HUD indicators
                 break;
             case LevelPhase.Exit: //Transition from Exit to next scene
                 //Scene cleanup:
@@ -213,7 +241,10 @@ public class LevelSequencer : MonoBehaviour
                     FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);     //Stop audio manager
                     LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel); //Stop level music
                 }
-                GameManager.instance.finalScore = PlayerController.main.playerScore;
+                if(GameManager.instance != null)
+                {
+                    GameManager.instance.finalScore = PlayerController.main.playerScore;
+                }
                 Cursor.visible = true;             //Make cursor visible
                 SceneManager.LoadScene(exitScene); //Load exit scene
                 break;

@@ -28,6 +28,8 @@ public class SharkController : MonoBehaviour
 
     [Header("Shark Timers")]
     [Range(0, 60)]
+    [SerializeField] private float timeUntilUnknown = 5;
+    [Range(0, 60)]
     [SerializeField] private float timeUntilInterested = 5;
     [Range(0, 60)]
     [SerializeField] private float timeUntilThreatened = 5;
@@ -47,12 +49,15 @@ public class SharkController : MonoBehaviour
     internal bool canMove = true;
     private bool isInSensor, alarmStarted;
     private float currentAlarmTimer;
+    private Rigidbody sharkRb;
 
-    internal IEnumerator raiseAlarmCoroutine, threatenedCooldownCoroutine, dashCoroutine, playerNodeSpawnCoroutine;
+    internal IEnumerator raiseAlarmCoroutine, threatenedCooldownCoroutine, dashCoroutine, playerNodeSpawnCoroutine, unknownCounterCoroutine;
 
     [HideInInspector]
-    public enum ThreatLevel { WANDERING, INTEREST, THREATENED }
+    public enum ThreatLevel { WANDERING = 1, INTEREST, THREATENED, HOMICIDAL }
     public ThreatLevel currentThreatLevel;
+    private bool startUnknownThreatCountdown, makeThreatUnknown;
+
     public static SharkController main;
 
     // Start is called before the first frame update
@@ -62,17 +67,20 @@ public class SharkController : MonoBehaviour
     }
     void Start()
     {
+        sharkRb = GetComponent<Rigidbody>();
         alarmStarted = false;
         currentSpeed = speed;
         currentRotSpeed = rotSpeed;
         currentLookAtSpeed = lookAtSpeed;
         playerLockedOn = false;
+        makeThreatUnknown = false;
         currentThreatLevel = ThreatLevel.WANDERING;
         LevelManager.main.UpdateThreatUI((int)currentThreatLevel);
         raiseAlarmCoroutine = RaiseAlarm();
         threatenedCooldownCoroutine = ThreatenedCooldown();
         dashCoroutine = DashAtSpeed();
         playerNodeSpawnCoroutine = SpawnNodesOnPlayer();
+        unknownCounterCoroutine = StartUnknownCountdown();
     }
 
     // Update is called once per frame
@@ -82,6 +90,11 @@ public class SharkController : MonoBehaviour
             && Vector3.Distance(PlayerController.main.transform.position, transform.position) < PlayerController.main.playerViewingDistance)
         {
             Debug.Log("Player Can See Shark! Holy Heck!");
+            UnhideThreatLevel();
+        }
+        else
+        {
+            HideThreatLevel();
         }
 
         //If the shark is moving
@@ -95,7 +108,8 @@ public class SharkController : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotTarget, currentRotSpeed * Time.deltaTime);
 
             //Always move the shark forward
-            transform.position += transform.forward * currentSpeed * Time.deltaTime;
+            //transform.position += transform.forward * currentSpeed * Time.deltaTime;
+            sharkRb.velocity = transform.forward * currentSpeed;
             rotTarget = Quaternion.LookRotation(targetPos - transform.position);
             Debug.DrawLine(transform.position, targetPos, Color.red);
 
@@ -116,6 +130,10 @@ public class SharkController : MonoBehaviour
             //Check the body sensor if they are not threatened
             CheckBodySensor();
         }
+        else
+        {
+            sharkRb.velocity = Vector3.zero;
+        }
 
         Debug.DrawLine(PlayerController.main.transform.position, transform.position, Color.cyan);
     }
@@ -134,6 +152,34 @@ public class SharkController : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void HideThreatLevel()
+    {
+        if (currentThreatLevel == ThreatLevel.WANDERING)
+        {
+            if (!startUnknownThreatCountdown)
+            {
+                StartCoroutine(unknownCounterCoroutine);
+                startUnknownThreatCountdown = true;
+            }
+        }
+    }
+
+    private void UnhideThreatLevel()
+    {
+        //If the threat is unknown, make the threat known
+        if (makeThreatUnknown)
+        {
+            makeThreatUnknown = false;
+            startUnknownThreatCountdown = false;
+            //Update the UI
+            LevelManager.main.UpdateThreatUI((int)currentThreatLevel);
+
+            //Stop and reset coroutine
+            StopCoroutine(unknownCounterCoroutine);
+            unknownCounterCoroutine = StartUnknownCountdown();
+        }
     }
 
     private void SmoothLookAt(Quaternion targetRotation)
@@ -222,6 +268,23 @@ public class SharkController : MonoBehaviour
         }
     }
 
+    IEnumerator StartUnknownCountdown()
+    {
+        Debug.Log("Starting Unknown Countdown...");
+        float currentTimer = 0;
+
+        while (currentTimer < timeUntilUnknown)
+        {
+            currentTimer += Time.deltaTime;
+            yield return null;
+        }
+
+        Debug.Log("Hide Threat Level");
+        makeThreatUnknown = true;
+        LevelManager.main.UpdateThreatUI(0);
+        unknownCounterCoroutine = StartUnknownCountdown();
+    }
+
     IEnumerator DashAtSpeed()
     {
         //Every few seconds, dash for half a second
@@ -247,7 +310,7 @@ public class SharkController : MonoBehaviour
     private void CheckAttackSensor()
     {
         //If the player is currently in the shark's body sensor, start raising an alarm
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position + transform.forward * 10, attackRadius, LayerMask.GetMask("Player"));
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position + transform.forward * (sharkWidth / 2), attackRadius, LayerMask.GetMask("Player"));
         if (hitColliders.Length != 0)
         {
             Debug.Log("Player Has Been Attacked! Game Over!");
@@ -345,10 +408,12 @@ public class SharkController : MonoBehaviour
             case ThreatLevel.INTEREST:
                 //Debug.Log("Threat Level: Interested");
                 DestroyAllNodes();
+                UnhideThreatLevel();
                 RemoveThreatSettings();
                 break;
             case ThreatLevel.THREATENED:
                 //Debug.Log("Threat Level: Threatened");
+                UnhideThreatLevel();
                 break;
         }
 

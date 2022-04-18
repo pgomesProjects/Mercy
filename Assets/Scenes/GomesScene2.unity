@@ -255,6 +255,10 @@ PrefabInstance:
       propertyPath: blindSpotAngle
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1792173148, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678107, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: m_Name
       value: Shark
@@ -277,7 +281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: sharkWidth
-      value: 55
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: lookAtSpeed
@@ -289,7 +293,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: attackRadius
-      value: 10
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: detectionRadius
@@ -1054,6 +1058,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!225 &1266053707 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 1266053707, guid: 63809936b98aba54392485c3f34e7885, type: 3}
+  m_PrefabInstance: {fileID: 1311042029}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1311042029
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1061,10 +1070,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2898423995548669643, guid: 63809936b98aba54392485c3f34e7885, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6038098376104873587, guid: 63809936b98aba54392485c3f34e7885, type: 3}
       propertyPath: m_Name
       value: PlayerUICanvas
@@ -1274,12 +1279,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1692946203185902172, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
       propertyPath: m_Height
-      value: 4
+      value: 6.2
       objectReference: {fileID: 0}
     - target: {fileID: 1692946203185902172, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
       propertyPath: m_Radius
-      value: 0.75
+      value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8298126614853201574, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ec2571ccd7490a84ca24672c47ad7c6d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
 --- !u!1 &1371940274
@@ -1737,6 +1746,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1311042030}
     - target: {fileID: 3845428981221293299, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: playerIndicator
+      value: 
+      objectReference: {fileID: 1266053707}
+    - target: {fileID: 3845428981221293299, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatIndicator
+      value: 
+      objectReference: {fileID: 1266053707}
+    - target: {fileID: 3845428981221293299, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
       propertyPath: cageDescendTarget
       value: 
       objectReference: {fileID: 925535792}
@@ -1792,6 +1809,86 @@ PrefabInstance:
       propertyPath: scoreText
       value: 
       objectReference: {fileID: 1311042033}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[0].a
+      value: 0.5882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[0].b
+      value: 0.16862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[0].g
+      value: 0.16862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[0].r
+      value: 0.16862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[1].a
+      value: 0.36078432
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[1].b
+      value: 0.46666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[1].g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[1].r
+      value: 0.4117647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[2].a
+      value: 0.5882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[2].b
+      value: 0.20392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[2].g
+      value: 0.7764706
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[3].a
+      value: 0.92156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[3].b
+      value: 0.21960784
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[3].g
+      value: 0.20392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[3].r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[4].a
+      value: 0.92156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[4].b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[4].g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845428981221293301, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
+      propertyPath: threatColors.Array.data[4].r
+      value: 0.5764706
+      objectReference: {fileID: 0}
     - target: {fileID: 3845428981221293302, guid: d3a36dbc0bf0daf4896e16325b6d36a0, type: 3}
       propertyPath: m_Name
       value: LevelManager
