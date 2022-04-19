@@ -5,6 +5,7 @@ using UnityEngine;
 public class SharkController : MonoBehaviour
 {
     [SerializeField] private float sharkWidth = 20;
+    [SerializeField] private float sharkTeleportationBuffer = 40; //The extra amount of distance to spawn outside of the player's vision
 
     [Header("Shark Speeds")]
     [SerializeField] private float speed = 5; //The speed of the shark's movement
@@ -33,6 +34,8 @@ public class SharkController : MonoBehaviour
     [SerializeField] private float timeUntilInterested = 5;
     [Range(0, 60)]
     [SerializeField] private float timeUntilThreatened = 5;
+    [Range(0, 60)]
+    [SerializeField] private float timeUntilTeleport = 20;
     [SerializeField] private float dashTimer = 5;
     [Range(0, 60)]
     [SerializeField] private float threatenedCooldown = 20;
@@ -51,12 +54,13 @@ public class SharkController : MonoBehaviour
     private float currentAlarmTimer;
     private Rigidbody sharkRb;
 
-    internal IEnumerator raiseAlarmCoroutine, threatenedCooldownCoroutine, dashCoroutine, playerNodeSpawnCoroutine, unknownCounterCoroutine;
+    internal IEnumerator raiseAlarmCoroutine, threatenedCooldownCoroutine, dashCoroutine, playerNodeSpawnCoroutine, unknownCounterCoroutine, teleportCounterCoroutine;
 
     [HideInInspector]
     public enum ThreatLevel { WANDERING = 1, INTEREST, THREATENED, HOMICIDAL }
     public ThreatLevel currentThreatLevel;
     private bool startUnknownThreatCountdown, makeThreatUnknown;
+    private bool startedTeleportCountdown;
 
     public static SharkController main;
 
@@ -81,25 +85,29 @@ public class SharkController : MonoBehaviour
         dashCoroutine = DashAtSpeed();
         playerNodeSpawnCoroutine = SpawnNodesOnPlayer();
         unknownCounterCoroutine = StartUnknownCountdown();
+        teleportCounterCoroutine = StartTeleportCountdown();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (IsSharkVisibleFromCamera() 
-            && Vector3.Distance(PlayerController.main.transform.position, transform.position) < PlayerController.main.playerViewingDistance)
-        {
-            Debug.Log("Player Can See Shark! Holy Heck!");
-            UnhideThreatLevel();
-        }
-        else
-        {
-            HideThreatLevel();
-        }
 
         //If the shark is moving
         if (canMove)
         {
+            if (IsSharkVisibleFromCamera()
+                && Vector3.Distance(PlayerController.main.transform.position, transform.position) < PlayerController.main.playerViewingDistance)
+            {
+                Debug.Log("Player Can See Shark! Holy Heck!");
+                UnhideThreatLevel();
+                ResetTeleportCounter();
+            }
+            else
+            {
+                HideThreatLevel();
+                CheckForTeleport();
+            }
+
             //Check attack sensor before everything
             CheckAttackSensor();
 
@@ -164,6 +172,27 @@ public class SharkController : MonoBehaviour
                 startUnknownThreatCountdown = true;
             }
         }
+    }
+
+    private void CheckForTeleport()
+    {
+        //If the threat is unknown
+        if (makeThreatUnknown)
+        {
+            if (!startedTeleportCountdown)
+            {
+                StartCoroutine(teleportCounterCoroutine);
+                startedTeleportCountdown = true;
+            }
+        }
+    }
+
+    private void ResetTeleportCounter()
+    {
+        StopCoroutine(teleportCounterCoroutine);
+        teleportCounterCoroutine = StartTeleportCountdown();
+
+        startedTeleportCountdown = false;
     }
 
     private void UnhideThreatLevel()
@@ -283,6 +312,29 @@ public class SharkController : MonoBehaviour
         makeThreatUnknown = true;
         LevelManager.main.UpdateThreatUI(0);
         unknownCounterCoroutine = StartUnknownCountdown();
+    }
+
+    IEnumerator StartTeleportCountdown()
+    {
+        Debug.Log("Starting Teleport Countdown...");
+        float currentTimer = 0;
+
+        while (currentTimer < timeUntilTeleport)
+        {
+            currentTimer += Time.deltaTime;
+            yield return null;
+        }
+
+        Debug.Log("Teleport To Player");
+        TeleportInFrontOfPlayer();
+        teleportCounterCoroutine = StartTeleportCountdown();
+    }
+
+    private void TeleportInFrontOfPlayer()
+    {
+        Vector3 playerPos = PlayerController.main.transform.localPosition;
+        Vector3 teleportPos = new Vector3(playerPos.x, playerPos.y, playerPos.z + PlayerController.main.playerViewingDistance + sharkTeleportationBuffer);
+        transform.position = teleportPos;
     }
 
     IEnumerator DashAtSpeed()
