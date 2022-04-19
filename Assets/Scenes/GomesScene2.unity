@@ -300,6 +300,10 @@ PrefabInstance:
       value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
+      propertyPath: timeUntilTeleport
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061423005058678108, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: threatenedCooldown
       value: 5
       objectReference: {fileID: 0}
