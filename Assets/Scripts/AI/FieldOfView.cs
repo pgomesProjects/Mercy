@@ -16,6 +16,7 @@ public class FieldOfView : MonoBehaviour
     public LayerMask obstructionMask;
 
     public bool canSeePlayer;
+    public SharkController.ThreatLevel visionType;
 
     private SharkController sharkObject;
 
@@ -67,11 +68,17 @@ public class FieldOfView : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
-                    canSeePlayer = true;
-                    //If they can see the player, stop any alarm or cooldown coroutines and keep at threatened
-                    StopCoroutine(sharkObject.raiseAlarmCoroutine);
-                    StopCoroutine(sharkObject.threatenedCooldownCoroutine);
-                    sharkObject.SetThreatLevel(SharkController.ThreatLevel.THREATENED);
+                    if(SharkController.main.currentThreatLevel != SharkController.ThreatLevel.THREATENED)
+                    {
+                        canSeePlayer = true;
+                        Debug.Log("Shark Sees Player In " + visionType);
+                        if (SharkController.main.currentThreatLevel != visionType)
+                        {
+                            sharkObject.SetThreatLevel(visionType);
+                        }
+                    }
+
+                    StopCooldowns();
                     //Debug.Log("Shark Can See Player!");
                 }
                 else
@@ -85,8 +92,37 @@ public class FieldOfView : MonoBehaviour
         {
             canSeePlayer = false;
             //Debug.Log("Shark Lost Sight Of Player!");
-            sharkObject.ResetThreatenedCooldown();
-            StartCoroutine(sharkObject.threatenedCooldownCoroutine);
+            ResetCooldowns();
+        }
+    }
+
+    private void StopCooldowns()
+    {
+        //If they can see the player, stop any alarm or cooldown coroutines and keep at threat level
+        StopCoroutine(sharkObject.raiseAlarmCoroutine);
+        switch (visionType)
+        {
+            case SharkController.ThreatLevel.INTEREST:
+                StopCoroutine(sharkObject.interestedCooldownCoroutine);
+                break;
+            case SharkController.ThreatLevel.THREATENED:
+                StopCoroutine(sharkObject.threatenedCooldownCoroutine);
+                break;
+        }
+    }
+
+    private void ResetCooldowns()
+    {
+        switch (visionType)
+        {
+            case SharkController.ThreatLevel.INTEREST:
+                sharkObject.ResetInterestedCooldown();
+                StartCoroutine(sharkObject.interestedCooldownCoroutine);
+                break;
+            case SharkController.ThreatLevel.THREATENED:
+                sharkObject.ResetThreatenedCooldown();
+                StartCoroutine(sharkObject.threatenedCooldownCoroutine);
+                break;
         }
     }
 }
