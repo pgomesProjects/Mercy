@@ -216,6 +216,7 @@ public class LevelSequencer : MonoBehaviour
                 CageController.main.ReleasePlayer();                                 //Release player from dive cage
                 CageController.main.GetComponent<FloatBob>().Initialize(true);       //Re-initialize and enable cage bob
                 //Update sequencer:
+                LevelManager.main.StartThreatMusic(1);
                 StartCoroutine(FadeIndicatorInOut(0.25f, false));
                 break;
             case LevelPhase.GracePeriod: phase = LevelPhase.Hunt; //Transition from Grace Period to Hunt

@@ -31,6 +31,7 @@ GameObject:
   - component: {fileID: 2061423005058678108}
   - component: {fileID: 1792173148}
   - component: {fileID: 33956439}
+  - component: {fileID: 812776569737587027}
   - component: {fileID: 938778875}
   - component: {fileID: 1105924404009557289}
   - component: {fileID: 8802161115452359269}
@@ -69,14 +70,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cacd4822fad0ab4c8e56fb4e88344b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sharkWidth: 20
+  sharkTeleportationBuffer: 40
   speed: 10
+  threatSpeed: 15
+  dashSpeed: 50
   rotSpeed: 20
-  initialAttackPower: 5
-  currentAttackPower: 0
-  attackMultiplier: 1.25
+  lookAtSpeed: 1
+  targetLookedAtSpeed: 0.25
+  threatenedRotSpeed: 80
+  lookingAtTargetRotSpeed: 1
+  attackRadius: 5
   detectionRadius: 60
+  timeUntilUnknown: 5
   timeUntilInterested: 5
   timeUntilThreatened: 5
+  timeUntilTeleport: 20
+  dashTimer: 5
   threatenedCooldown: 20
   currentThreatLevel: 0
 --- !u!54 &1792173148
@@ -96,6 +106,29 @@ Rigidbody:
   m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!114 &33956439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061423005058678107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78ec5a41606d454caae63083815a9d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 60
+  blindSpotAngle: 50
+  sightAngle: 150
+  playerObject: {fileID: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 256
+  canSeePlayer: 0
+--- !u!114 &812776569737587027
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
