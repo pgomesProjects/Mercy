@@ -20,7 +20,6 @@ public class TitlescreenController : MonoBehaviour
 
     public void StartGame()
     {
-        FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);
         SceneManager.LoadScene(levelToLoad);
     }
 

@@ -6181,7 +6181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c66d3b9ace8e3834c96654f5b9ff95c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelToLoad: GomesScene2
+  levelToLoad: StoryScene
   menuStates:
   - {fileID: 1652360676}
   - {fileID: 1853060476}
