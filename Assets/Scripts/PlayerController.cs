@@ -29,7 +29,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Tooltip("Speed at which player can swim up (in world space")]                                                    private float ascendSpeed;
     [SerializeField] [Tooltip("Speed at which player can swim down (in world space)")]                                                 private float descendSpeed;
     [SerializeField] [Tooltip("How quickly player accelerates to target speed while swimming")] [Range(0, 1)]                          private float swimAccel;
+    [SerializeField] [Tooltip("How much force is applied when player dashes")]                                                         private float dashForce;
+    [SerializeField] [Tooltip("How long dash acceleration lingers after initial impulse")]                                             private float dashPeriod;
+    [SerializeField] [Tooltip("Time player must wait after dashing before they may dash again")]                                       private float dashCooldown;
     [SerializeField] [Tooltip("Swim speed multiplier (value) depending on horizontal swim direction (t0 is forward, t1 is backward)")] private AnimationCurve swimDirModCurve;
+    [SerializeField] [Tooltip("Curve describing player velocity modification during dash period")]                                     private AnimationCurve dashCurve;
 
     [Header("Mouselook:")]
     [SerializeField] [Tooltip("How dramatically camera responds to mouse/joystick movements (along each axis")] private Vector2 lookSensitivity;
@@ -44,7 +48,9 @@ public class PlayerController : MonoBehaviour
     private Quaternion lookOrigin; //Original look direction used for reference
     private Quaternion lookTarget; //Rotation which player is currently trying to get to
 
-    private Vector3 moveTarget; //Player's current target velocity
+    private Vector3 moveTarget;       //Player's current target velocity
+    private Vector3 dashMoveTarget;   //Player target velocity for most recent dash
+    private float timeSinceDash = -1; //Time since player last dashed (negative if player is ready to dash again)
 
     //[SerializeField] private int playerHealth = 100; //The player's health attribute
     public int playerScore; //Score that depends on the items the player picks up
@@ -78,6 +84,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+        //Item pickup sequence:
         if (pickingUpItem) //Player is currently picking up an item
         {
             //Update pickup progress:
@@ -102,13 +109,30 @@ public class PlayerController : MonoBehaviour
             if (Vector3.Distance(transform.localRotation.eulerAngles, lookTarget.eulerAngles) < 0.001f) { transform.localRotation = lookTarget; } //Snap to target if close enough
         }
 
-        //Swimming:
-        if (rb.velocity != moveTarget) //Player is not currently traveling at target velocity
+        //Dashing:
+        Vector3 actualMoveTarget = Quaternion.LookRotation(transform.forward, transform.up) * moveTarget; //Get vector for actual move target (corrected by player rotation, available to be modified by dash if needed)
+        bool forceVelCalc = false; //Janky bool to make dashing work the way I want it
+        if (timeSinceDash >= 0) //Player is currently dashing
         {
-            if (moveTarget != Vector3.zero) //Player is using input to move in a direction
+            timeSinceDash += Time.fixedDeltaTime; //Increment dash time
+
+            //Time triggers:
+            if (timeSinceDash <= dashPeriod) //Dash is fully active and moveTarget needs to be modified
             {
-                Vector3 correctedMoveTarget = Quaternion.LookRotation(transform.forward, transform.up) * moveTarget;
-                rb.velocity = Vector3.Lerp(rb.velocity, correctedMoveTarget, swimAccel); //Lerp velocity (accelerate) toward target
+                //Adjust move target (to make dash feel smoother):
+                float moveTargetBlend = dashCurve.Evaluate(1 - (timeSinceDash / dashPeriod));       //Get interpolant for blending between actual move target velocity and modified dash velocity
+                actualMoveTarget = Vector3.Lerp(dashMoveTarget, actualMoveTarget, moveTargetBlend); //Blend between move target decided by inital dash and move target decided by current player input
+                forceVelCalc = true;
+            }
+            if (timeSinceDash >= dashCooldown) timeSinceDash = -1; //Indicate that player is no longer dashing once recharge time has been fulfilled
+        }
+
+        //Swimming:
+        if (rb.velocity != actualMoveTarget) //Player is not currently traveling at target velocity
+        {
+            if (moveTarget != Vector3.zero || forceVelCalc) //Player is using input to move in a direction (or is dashing)
+            {
+                rb.velocity = Vector3.Lerp(rb.velocity, actualMoveTarget, swimAccel); //Lerp velocity (accelerate) toward target
             }
         }
     }
@@ -149,7 +173,22 @@ public class PlayerController : MonoBehaviour
     }
     public void OnDash(InputAction.CallbackContext context)
     {
-        
+        if (context.started) //Dash button has been pushed
+        {
+            //Validity checks:
+            if (timeSinceDash != -1) return;              //Do not allow player to dash before cooldown has ended
+            if (CageController.main.playerInside) return; //Do not allow player to dash while inside cage
+
+            //Compute dash impulse:
+            Vector3 correctedMoveTarget = moveTarget.normalized;                                        //Get vector for normalized move target (determined by input)
+            if (moveTarget == Vector3.zero) correctedMoveTarget = Vector3.forward;                      //Default to dashing straight forward if player gives no specific input
+            dashMoveTarget = correctedMoveTarget * dashForce;                                           //Apply dash force to normalized move target (save for velocity calculations later)
+            dashMoveTarget = Quaternion.LookRotation(transform.forward, transform.up) * dashMoveTarget; //Rotate move target to align with player's facing direction
+            rb.AddForce(dashMoveTarget, ForceMode.Impulse);                                             //Apply dash vector to player rigidbody as instantaneous acceleration
+
+            //Cleanup:
+            timeSinceDash = 0; //Indicate that player is now dashing
+        }
     }
     public void OnPickUp(InputAction.CallbackContext context)
     {

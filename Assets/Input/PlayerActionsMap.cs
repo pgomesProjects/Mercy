@@ -273,7 +273,7 @@ public partial class @PlayerActionsMap : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""44fa8772-d915-4520-9ace-32d4f092ef6e"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -284,7 +284,7 @@ public partial class @PlayerActionsMap : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ed22a3b3-9819-4588-b8ce-a92f6d14e138"",
-                    ""path"": ""<Keyboard>/leftShift"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
