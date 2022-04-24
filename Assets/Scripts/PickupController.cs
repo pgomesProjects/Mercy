@@ -7,14 +7,13 @@ public class PickupController : MonoBehaviour
     [SerializeField] private int scoreValue;
     [SerializeField] private float massInPounds;
 
-    private bool canBeCollected;
+    internal bool canBeCollected;
     private Light selectionLight;
     private PlayerActionsMap playerActions;
-    private PlayerController playerObject;
     private void Awake()
     {
         playerActions = new PlayerActionsMap();
-        playerActions.Player.PickUp.performed += _ => CollectItem();
+        //playerActions.Player.PickUp.performed += _ => CollectItem();
     }
 
     // Start is called before the first frame update
@@ -41,7 +40,7 @@ public class PickupController : MonoBehaviour
         {
             canBeCollected = true;
             selectionLight.gameObject.SetActive(true);
-            playerObject = other.GetComponent<PlayerController>();
+            PlayerController.pickupsInRange.Add(this);
         }
     }
 
@@ -52,16 +51,20 @@ public class PickupController : MonoBehaviour
         {
             canBeCollected = false;
             selectionLight.gameObject.SetActive(false);
-            playerObject = null;
+            PlayerController.pickupsInRange.Remove(this);
+            if (PlayerController.pickupsInRange.Count == 0) PlayerController.main.CancelPickup(); //Make sure to cancel pickup procedure if this was the only item in range of player
         }
     }
 
-    private void CollectItem()
+    public void CollectItem()
     {
         //If the item can be collected, tell the player that the item has been picked up and add to score
         if (canBeCollected)
         {
-            playerObject.PickedUpItem(scoreValue);
+            PlayerController.main.playerScore += scoreValue;
+            Debug.Log("Score: " + PlayerController.main.playerScore);
+            LevelManager.main.UpdateScore(PlayerController.main.playerScore);
+            PlayerController.pickupsInRange.Remove(this);
             Destroy(gameObject);
         }
     }

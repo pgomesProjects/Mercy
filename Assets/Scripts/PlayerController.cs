@@ -5,6 +5,7 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using CustomEnums;
+using UnityEngine.UI;
 
 /// <summary>
 /// Processes player input and movement functionality.
@@ -14,9 +15,13 @@ public class PlayerController : MonoBehaviour
     //Classes, Enums & Structs:
 
     //Objects & Components:
-    public static PlayerController main; //Singleton instance of playercontroller
-    private PlayerInput playerInput;     //Script handling player input events
-    internal Rigidbody rb;               //Player rigidbody component
+    public static PlayerController main;   //Singleton instance of playercontroller
+    private PlayerInput playerInput;       //Script handling player input events
+    internal Rigidbody rb;                 //Player rigidbody component
+    public Camera playerCam;               //Player camera component
+    public Slider pickupProgressIndicator; //Player UI element which displays pickup progress
+
+    public static List<PickupController> pickupsInRange = new List<PickupController>(); //Pickups currently in range of player
 
     //Settings:
     [Header("Swimming:")]
@@ -31,6 +36,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Tooltip("Smooths out camera motion, but at the cost of responsiveness")] [Range(1, 0)]    private float lookDamping;
     [SerializeField] [MinMaxSlider(-90, 90)] [Tooltip("How far up or down player can look (in degrees)")]       private Vector2 verticalLookLimits;
 
+    [Header("Other:")]
+    [SerializeField] [Tooltip("How long player takes to pick up an item")] private float pickupTime;
+
     //Runtime Memory Vars:
     private Vector2 mouseRotation; //Cumulative angular rotation generated from mouse movements
     private Quaternion lookOrigin; //Original look direction used for reference
@@ -40,10 +48,10 @@ public class PlayerController : MonoBehaviour
 
     //[SerializeField] private int playerHealth = 100; //The player's health attribute
     public int playerScore; //Score that depends on the items the player picks up
+    private bool pickingUpItem = false;  //Whether or not player is currently picking up an item
+    private float timeHoldingPickup = 0; //Time player has spent holding pickup button when in range of pickup
 
     public Vector3 interestedAreaBox = new Vector3(200, 200, 200); //The area in which the shark goes to when interested
-
-    public Camera playerCam;
     public float playerViewingDistance = 100;
 
     //RUNTIME METHODS:
@@ -53,8 +61,9 @@ public class PlayerController : MonoBehaviour
         if (main == null) { main = this; } else { Destroy(this); } //Singleton-ize playerController script
 
         //Get objects & components:
-        if (!TryGetComponent(out playerInput)) Debug.LogError("Player object is missing PlayerInput script"); //Make sure player has input script
-        if (!TryGetComponent(out rb)) Debug.LogError("Player object does not have an attached RigidBody");    //Make sure player has rigidbody
+        if (!TryGetComponent(out playerInput)) Debug.LogError("Player object is missing PlayerInput script");                  //Make sure player has input script
+        if (!TryGetComponent(out rb)) Debug.LogError("Player object does not have an attached RigidBody");                     //Make sure player has rigidbody
+        if (pickupProgressIndicator == null) Debug.LogError("Make sure to assign PickupProgress UI element to player object"); //Make sure player has pickup progress indicator
 
     }
     private void Start()
@@ -69,7 +78,20 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        
+        if (pickingUpItem) //Player is currently picking up an item
+        {
+            //Update pickup progress:
+            timeHoldingPickup += Time.deltaTime; //Increment pickup time
+            pickupProgressIndicator.value = Mathf.Min(1, timeHoldingPickup / pickupTime); //Display pickup progress on HUD
+
+            //Check for pickup procedure:
+            if (timeHoldingPickup >= pickupTime) //Player has held button long enough to pick up item
+            {
+                if (pickupsInRange.Count > 0) pickupsInRange[0].CollectItem(); //Collect oldest pickup in list
+                if (pickupsInRange.Count > 0) StartPickup();                   //Restart pickup counter if there are more objects to pick up
+                else CancelPickup();                                           //Stop pickup counter if everything in range of player is picked up
+            }
+        }
     }
     private void FixedUpdate()
     {
@@ -89,14 +111,6 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = Vector3.Lerp(rb.velocity, correctedMoveTarget, swimAccel); //Lerp velocity (accelerate) toward target
             }
         }
-    }
-
-    public void PickedUpItem(int score)
-    {
-        //Adds to score counter
-        playerScore += score;
-        Debug.Log("Score: " + playerScore);
-        LevelManager.main.UpdateScore(playerScore);
     }
 
     //INPUT METHODS:
@@ -145,6 +159,23 @@ public class PlayerController : MonoBehaviour
         {
             LevelSequencer.main.ProgressSequence(); //Progress game sequence
         }
+
+        //Check for item pickup:
+        if (context.started && pickupsInRange.Count > 0) StartPickup(); //Indicate that player is picking up item
+        if (context.canceled) CancelPickup();                           //Stop picking up item if control is released
+    }
+
+    private void StartPickup()
+    {
+        pickingUpItem = true;                               //Indicate item is being picked up
+        timeHoldingPickup = 0;                              //Reset pickup time
+        pickupProgressIndicator.gameObject.SetActive(true); //Show progress indicator
+    }
+    public void CancelPickup()
+    {
+        pickingUpItem = false;                               //Indicate no items are being picked up
+        timeHoldingPickup = 0;                               //Reset pickup time
+        pickupProgressIndicator.gameObject.SetActive(false); //Hide progress indicator
     }
 
 #if UNITY_EDITOR

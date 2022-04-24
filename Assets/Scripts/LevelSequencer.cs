@@ -44,9 +44,9 @@ public class LevelSequencer : MonoBehaviour
     /// <summary>Level's current sequence.</summary>
     internal LevelPhase phase = LevelPhase.Entry; //Start at entry phase
 
-    private float sequenceTime = 0; //Time (in seconds) remaining in current sequence.  Zero if timer is not in use
-    private Vector3 cageOrigPos;    //Original position of dive cage
-    private Vector3 cageTargPos;    //Current target position for dive cage
+    private float sequenceTime = 0;  //Time (in seconds) remaining in current sequence.  Zero if timer is not in use
+    private Vector3 cageOrigPos;     //Original position of dive cage
+    private Vector3 cageTargPos;     //Current target position for dive cage
 
     //RUNTIME METHODS:
     private void Awake()

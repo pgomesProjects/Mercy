@@ -132,6 +132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c662c4cbf0da0944e9868af2239f324d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCam: {fileID: 1130405230100577287}
+  pickupProgressIndicator: {fileID: 0}
   baseSwimSpeed: 100
   ascendSpeed: 40
   descendSpeed: 70
@@ -163,9 +165,9 @@ MonoBehaviour:
   lookSensitivity: {x: 0.15, y: 0.15}
   lookDamping: 0.2
   verticalLookLimits: {x: -75, y: 74}
+  pickupTime: 1.5
   playerScore: 0
   interestedAreaBox: {x: 200, y: 15, z: 200}
-  playerCam: {fileID: 1130405230100577287}
   playerViewingDistance: 370
 --- !u!114 &1130405230645989019
 MonoBehaviour:
