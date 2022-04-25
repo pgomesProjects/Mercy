@@ -21,9 +21,9 @@ public class CageController : MonoBehaviour
     [SerializeField] [Tooltip("How fast the cage door opens and closes")]                                          private float doorSpeed;
     [SerializeField] [Tooltip("How fast the door closes when player enters the cage while being chased by shark")] private float doorSlamSpeed;
     [Header("Sound Effects:")]
-    [SerializeField] [Tooltip("Sound made when door opens")]        private AudioClip doorOpenSound;
-    [SerializeField] [Tooltip("Sound made when door closes")]       private AudioClip doorCloseSound;
-    [SerializeField] [Tooltip("Sound made when door slams closed")] private AudioClip doorSlamSound;
+    [SerializeField] [Tooltip("Name of sound made when door opens")]        private string doorOpenSound;
+    [SerializeField] [Tooltip("Name of sound made when door closes")]       private string doorCloseSound;
+    [SerializeField] [Tooltip("Name of sound made when door slams closed")] private string doorSlamSound;
     [Space]
 
     //Runtime Vars:
@@ -112,6 +112,12 @@ public class CageController : MonoBehaviour
         PlayerController.main.transform.parent = transform; //Child player to cage transform
         doorSpeed = doorSlamSpeed;                          //Make door close really fast
         ToggleDoor(false);                                  //Close cage door
+
+        //Play door slam SFX
+        if (FindObjectOfType<AudioManager>() != null) //Scene has audio manager
+        {
+            FindObjectOfType<AudioManager>().Play(doorSlamSound, PlayerPrefs.GetFloat("SFXVolume"));
+        }
     }
     /// <summary>
     /// Call when player enters the dive cage.
@@ -155,6 +161,25 @@ public class CageController : MonoBehaviour
     public void ToggleDoor(bool open)
     {
         //Begins door opening/closing animation.
+
+        //If the door is opening, play the open SFX
+        if (open)
+        {
+            //Play door open SFX
+            if (FindObjectOfType<AudioManager>() != null) //Scene has audio manager
+            {
+                FindObjectOfType<AudioManager>().Play(doorOpenSound, PlayerPrefs.GetFloat("SFXVolume"));
+            }
+        }
+        //If the door is closing and the phase is not at Exit, play the door close SFX
+        else
+        {
+            //Play door close SFX
+            if (FindObjectOfType<AudioManager>() != null && LevelSequencer.main.phase != LevelPhase.Exit) //Scene has audio manager
+            {
+                FindObjectOfType<AudioManager>().Play(doorCloseSound, PlayerPrefs.GetFloat("SFXVolume"));
+            }
+        }
 
         //Setup:
         doorOpen = open;        //Determine door animation

@@ -336,9 +336,25 @@ public class SharkController : MonoBehaviour
 
     private void TeleportInFrontOfPlayer()
     {
-        Vector3 playerPos = PlayerController.main.transform.localPosition;
-        Vector3 teleportPos = new Vector3(playerPos.x, playerPos.y, playerPos.z + PlayerController.main.playerViewingDistance + sharkTeleportationBuffer);
+        Vector3 teleportPos = PlayerController.main.transform.position + (PlayerController.main.transform.forward * (PlayerController.main.playerViewingDistance + sharkTeleportationBuffer));
+
+        //If the shark's teleport position is less than 60, spawn her high enough so she doesn't spawn below the ground or right underneath the player
+        if (teleportPos.y < 55)
+            teleportPos.y = 200;
+
         transform.position = teleportPos;
+
+        float randomFloat = Random.value;
+
+        Quaternion sharkRotation = PlayerController.main.transform.rotation;
+
+        //Two-thirds chance of the shark being turned perpendicular the player
+        if (randomFloat > 0.333f)
+        {
+            sharkRotation.y = sharkRotation.y + 90;
+        }
+
+        transform.rotation = sharkRotation;
     }
 
     IEnumerator DashAtSpeed()

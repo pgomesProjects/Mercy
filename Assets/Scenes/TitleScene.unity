@@ -2942,6 +2942,21 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: CageOpen
+    clip: {fileID: 8300000, guid: f90068e6cce7dc44a86b7563796ee181, type: 3}
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: CageClose
+    clip: {fileID: 8300000, guid: b4c165802c7481549a884d567b671aa5, type: 3}
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: CageSlam
+    clip: {fileID: 8300000, guid: 0fc76c643cb4dd349b51681f2fc8151c, type: 3}
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!1 &1044891802
 GameObject:
   m_ObjectHideFlags: 0
