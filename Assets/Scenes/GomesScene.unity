@@ -231,7 +231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4771788278167373917, guid: 69208dbae0534ed4d8e39e91e0d7b41f, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4771788278167373917, guid: 69208dbae0534ed4d8e39e91e0d7b41f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -973,6 +973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f4f361863efce349926b271c7296948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  finalScore: 0
   playingSongName: 
 --- !u!114 &1579249961
 MonoBehaviour:
@@ -1360,7 +1361,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4771788278167373917, guid: 69208dbae0534ed4d8e39e91e0d7b41f, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4771788278167373917, guid: 69208dbae0534ed4d8e39e91e0d7b41f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1478,7 +1479,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1130405230645989017, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1130405230645989017, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1543,7 +1544,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678111, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678111, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1600,7 +1601,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4771788278167373917, guid: 69208dbae0534ed4d8e39e91e0d7b41f, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4771788278167373917, guid: 69208dbae0534ed4d8e39e91e0d7b41f, type: 3}
       propertyPath: m_LocalPosition.x
