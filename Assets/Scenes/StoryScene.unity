@@ -281,13 +281,16 @@ MonoBehaviour:
   levelToLoad: GomesScene2
   storyText: {fileID: 497924094}
   storyDialogLines:
-  - Seven scuba divers have died trying to accomplish a goal to retreive valuable
+  - Seven scuba divers have died trying to accomplish a goal to retrieve valuable
     relics, and sell them to the highest bidder.<br><br>The cause of these deaths
-    are done by an immortal Great White Shark, making this mission unworthy of completing.
-  - However, some random narcissistic uncle eho's on vacation decided to put his
-    life on the line by gearing up his conveniently packed scuba gear to retrieve
-    the relics to prove how it is possible to survive such a mission, under motivation
-    to win the heart of his future bride.
+    are done by an immortal Great White Shark, provoking the authorities to claim
+    that the mission is unworthy of taking.
+  - "However, you come in, and you\u2019re bored.  You wanted to put your life on
+    the line by gearing up in your own personal scuba gear to retrieve the relics
+    to prove how it is possible to survive such a mission that the authorities CLEARLY
+    say NOT to undergo."
+  - Controls:<br><br>W,A,S,D to move around, and E to collect items. If you dislike
+    using the keyboard, get an Xbox Controller and install JoyToKey.
   storyButtons:
   - {fileID: 530196766}
   - {fileID: 1038777846}
