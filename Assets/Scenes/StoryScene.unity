@@ -281,16 +281,19 @@ MonoBehaviour:
   levelToLoad: GomesScene2
   storyText: {fileID: 497924094}
   storyDialogLines:
-  - Seven scuba divers have died trying to accomplish a goal to retrieve valuable
-    relics, and sell them to the highest bidder.<br><br>The cause of these deaths
-    are done by an immortal Great White Shark, provoking the authorities to claim
-    that the mission is unworthy of taking.
-  - "However, you come in, and you\u2019re bored.  You wanted to put your life on
-    the line by gearing up in your own personal scuba gear to retrieve the relics
-    to prove how it is possible to survive such a mission that the authorities CLEARLY
-    say NOT to undergo."
-  - Controls:<br><br>W,A,S,D to move around, and E to collect items. If you dislike
-    using the keyboard, get an Xbox Controller and install JoyToKey.
+  - According to local tour guides, you reside near an ocean with valuable relics
+    strewn about the ocean floor. The value of the items in the deep depths are rumored
+    to be in the millions.
+  - Around seven people have tried their luck finding the treasure, but all have
+    disappeared without a trace. The area is notorious for their territorial sharks,
+    especially the one they call the almighty "Mercy".
+  - You have the opportunity to thrive where others fell. You are putting your life
+    on the line for the chance at life-changing riches. While the task is risky and
+    definitely life-threatening, the risk might be worth an array of rewards. Grab
+    whatever you can, because that DAMN shark has an eye on you.
+  - "Controls:<br><br>WASD \u2013 Swim Around<br>Hold E \u2013 Pick Up Treasure<br>Space
+    \u2013 Dash.<br>If you dislike using the keyboard, get an Xbox Controller and
+    install JoyToKey."
   storyButtons:
   - {fileID: 530196766}
   - {fileID: 1038777846}
