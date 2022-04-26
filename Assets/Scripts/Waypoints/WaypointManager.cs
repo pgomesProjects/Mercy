@@ -26,7 +26,7 @@ public class WaypointManager : MonoBehaviour
             {
                 for(int j = 0; j < data.waypointPrefab.Count; j++)
                 {
-                    GameObject tmpWaypoint = Instantiate(data.waypointPrefab[j]);
+                    GameObject tmpWaypoint = data.waypointPrefab[j];
                     WaypointController tmpWaypointController = tmpWaypoint.GetComponent<WaypointController>();
 
                     GameObject tmpWaypointUI = Instantiate(data.waypointUIPrefab);
@@ -37,7 +37,7 @@ public class WaypointManager : MonoBehaviour
                     tmpWaypointController.controller.data.item.message = tmpWaypointUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
                     tmpWaypointController.controller.data.item.waypointUI = tmpWaypointUI;
                     tmpWaypointController.transform.SetParent(data.worldWaypoints.transform);
-                    tmpWaypointController.transform.position = data.waypointPrefab[j].transform.position;
+                    //tmpWaypointController.transform.position = data.waypointPrefab[j].transform.position;
                 }
             }
         }

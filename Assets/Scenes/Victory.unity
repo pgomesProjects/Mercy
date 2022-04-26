@@ -1220,5 +1220,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cfa16002d8aba74dbd952a5ae54b9b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reloadLevel: GomesScene2
+  reloadLevel: HotteScene
   finalScoreText: {fileID: 1703069834}

@@ -1012,7 +1012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120428514286c80458739d1f40bb3847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  restartLevel: GomesScene2
+  restartLevel: HotteScene
   titlescreenLevel: TitleScene
 --- !u!114 &1839871619
 MonoBehaviour:

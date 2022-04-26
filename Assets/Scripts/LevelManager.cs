@@ -40,6 +40,7 @@ public class LevelManager : MonoBehaviour
 
     public void UpdateThreatUI(int level)
     {
+        Debug.Log("Threat UI: " + level);
         threatUI.color = threatColors[level];
     }
 

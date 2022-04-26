@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d217e9eddfb279242b57700875af8d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelToLoad: GomesScene2
+  levelToLoad: HotteScene
   storyText: {fileID: 497924094}
   storyDialogLines:
   - According to local tour guides, you reside near an area with relics strewn about
