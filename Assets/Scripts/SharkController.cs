@@ -10,8 +10,12 @@ public class SharkController : MonoBehaviour
     [Header("Shark Speeds")]
     [SerializeField] private float speed = 5; //The speed of the shark's movement
     [SerializeField] private float threatSpeed = 15; //The speed of the shark's movement when threatened
+    private float originalThreatSpeed;
     [SerializeField] private float dashSpeed = 50; //The dash speed of the shark
-     
+    private float originalDashSpeed;
+
+    private float originalThreatenedRadius;
+
     [Header("Shark Rotation Values")]
     [SerializeField] private float rotSpeed = 20; //The speed that the shark rotates its body towards its target position
     [SerializeField] private float lookAtSpeed = 1; //The speed that the shark looks at it's target position
@@ -19,13 +23,20 @@ public class SharkController : MonoBehaviour
     [SerializeField] private float threatenedRotSpeed = 80; //The speed that the shark rotates its body towards its target position when threatened
     [SerializeField] private float lookingAtTargetRotSpeed = 1; //The speed that the shark rotates its body towards its target position when threatened
 
-    [Header("Shark Attack Values")]
+    [Header("Shark Float Values")]
     [SerializeField] private float attackRadius = 5; //The radius in front of the shark where the player is attacked in
+    [SerializeField] private float threatenedSpeedMultiplier = 0.1f;
+    [SerializeField] private float FOVIncreaseRate = 10;
+    [SerializeField] private float interestedAreaDecreaseRate = 5;
+    [SerializeField] private float aggressionUpdateUnits = 10; //The amount of points that the player needs to collect to update the aggression
+
     //[SerializeField] private float initialAttackPower = 5; //The amount of damage the shark initially deals
     //[SerializeField] private float currentAttackPower; //The amount of damage the shark currently deals
     //[SerializeField] private float attackMultiplier = 1.25f; //The longer the player is being damaged by the shark, the more damage is dealt
 
     [SerializeField] private float detectionRadius = 60;
+
+    private FieldOfView[] sharkFOV;
 
     [Header("Shark Timers")]
     [Range(0, 60)]
@@ -74,6 +85,8 @@ public class SharkController : MonoBehaviour
         sharkRb = GetComponent<Rigidbody>();
         alarmStarted = false;
         currentSpeed = speed;
+        originalThreatSpeed = threatSpeed;
+        originalDashSpeed = dashSpeed;
         currentRotSpeed = rotSpeed;
         currentLookAtSpeed = lookAtSpeed;
         playerLockedOn = false;
@@ -87,6 +100,10 @@ public class SharkController : MonoBehaviour
         playerNodeSpawnCoroutine = SpawnNodesOnPlayer();
         unknownCounterCoroutine = StartUnknownCountdown();
         teleportCounterCoroutine = StartTeleportCountdown();
+
+        //0 = Interested FOV, 1 = Threatened FOV
+        sharkFOV = GetComponents<FieldOfView>();
+        originalThreatenedRadius = sharkFOV[1].radius;
     }
 
     // Update is called once per frame
@@ -277,6 +294,48 @@ public class SharkController : MonoBehaviour
         }
     }
 
+    public void UpdateAggression()
+    {
+        Debug.Log("Original Threat Speeds: " + threatSpeed + " | " + dashSpeed);
+
+        //Update threat speed and dash speed based on player's score
+        threatSpeed = originalThreatSpeed * (1 + ((int)(PlayerController.main.playerScore / aggressionUpdateUnits) * threatenedSpeedMultiplier));
+        dashSpeed = originalDashSpeed * (1 + ((int)(PlayerController.main.playerScore / aggressionUpdateUnits) * threatenedSpeedMultiplier));
+
+        Debug.Log("New Threat Speeds: " + threatSpeed + " | " + dashSpeed);
+
+        Debug.Log("Original Threatened FOV: " + sharkFOV[1].radius);
+
+        //Update threatened FOV
+        sharkFOV[1].radius = originalThreatenedRadius + ((int)(PlayerController.main.playerScore / aggressionUpdateUnits) * FOVIncreaseRate);
+
+        //Make sure that the threatened radius cannot get bigger than the interested radius
+        if (sharkFOV[1].radius > sharkFOV[0].radius)
+        {
+            sharkFOV[1].radius = sharkFOV[0].radius;
+        }
+
+        Debug.Log("New Threatened FOV: " + sharkFOV[1].radius);
+
+        //Update player interested radius by making it smaller
+
+        Debug.Log("Original Interested Area: " + PlayerController.main.interestedAreaBox);
+
+        Vector3 newInterestedAreaBox = PlayerController.main.originalInterestedAreaBox;
+        newInterestedAreaBox.x -= (int)(PlayerController.main.playerScore / aggressionUpdateUnits) * interestedAreaDecreaseRate;
+        newInterestedAreaBox.z -= (int)(PlayerController.main.playerScore / aggressionUpdateUnits) * interestedAreaDecreaseRate;
+
+        //Make sure the area box cannot become negative
+        if (newInterestedAreaBox.x < 0)
+            newInterestedAreaBox.x = 0;
+
+        if (newInterestedAreaBox.z < 0)
+            newInterestedAreaBox.z = 0;
+
+        PlayerController.main.interestedAreaBox = newInterestedAreaBox;
+
+        Debug.Log("New Interested Area: " + PlayerController.main.interestedAreaBox);
+    }
 
     private void BeginThreat()
     {
