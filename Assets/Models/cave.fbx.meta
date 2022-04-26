@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 562010f43589f17458c561c2949dbb0e
+guid: cbc9c27a27f39804498530656a976c1e
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
@@ -7,10 +7,10 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: blinn1
-    second: {fileID: 2100000, guid: 263b891f0b0005949a5f97c44cf29cd1, type: 2}
+      name: surfaceShader1
+    second: {fileID: 2100000, guid: 0094db83f1b71e940805413bbbf5b6e5, type: 2}
   materials:
-    materialImportMode: 1
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
