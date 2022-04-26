@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using CustomEnums;
+using UnityEngine.UI;
 
 /// <summary>
 /// Processes player input and movement functionality.
@@ -13,9 +15,13 @@ public class PlayerController : MonoBehaviour
     //Classes, Enums & Structs:
 
     //Objects & Components:
-    public static PlayerController main; //Singleton instance of playercontroller
-    private PlayerInput playerInput;     //Script handling player input events
-    private Rigidbody rb;                //Player rigidbody component
+    public static PlayerController main;   //Singleton instance of playercontroller
+    private PlayerInput playerInput;       //Script handling player input events
+    internal Rigidbody rb;                 //Player rigidbody component
+    public Camera playerCam;               //Player camera component
+    public Slider pickupProgressIndicator; //Player UI element which displays pickup progress
+
+    public static List<PickupController> pickupsInRange = new List<PickupController>(); //Pickups currently in range of player
 
     //Settings:
     [Header("Swimming:")]
@@ -23,24 +29,36 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Tooltip("Speed at which player can swim up (in world space")]                                                    private float ascendSpeed;
     [SerializeField] [Tooltip("Speed at which player can swim down (in world space)")]                                                 private float descendSpeed;
     [SerializeField] [Tooltip("How quickly player accelerates to target speed while swimming")] [Range(0, 1)]                          private float swimAccel;
+    [SerializeField] [Tooltip("How much force is applied when player dashes")]                                                         private float dashForce;
+    [SerializeField] [Tooltip("How long dash acceleration lingers after initial impulse")]                                             private float dashPeriod;
+    [SerializeField] [Tooltip("Time player must wait after dashing before they may dash again")]                                       private float dashCooldown;
     [SerializeField] [Tooltip("Swim speed multiplier (value) depending on horizontal swim direction (t0 is forward, t1 is backward)")] private AnimationCurve swimDirModCurve;
+    [SerializeField] [Tooltip("Curve describing player velocity modification during dash period")]                                     private AnimationCurve dashCurve;
 
     [Header("Mouselook:")]
     [SerializeField] [Tooltip("How dramatically camera responds to mouse/joystick movements (along each axis")] private Vector2 lookSensitivity;
     [SerializeField] [Tooltip("Smooths out camera motion, but at the cost of responsiveness")] [Range(1, 0)]    private float lookDamping;
     [SerializeField] [MinMaxSlider(-90, 90)] [Tooltip("How far up or down player can look (in degrees)")]       private Vector2 verticalLookLimits;
 
+    [Header("Other:")]
+    [SerializeField] [Tooltip("How long player takes to pick up an item")] private float pickupTime;
+
     //Runtime Memory Vars:
     private Vector2 mouseRotation; //Cumulative angular rotation generated from mouse movements
     private Quaternion lookOrigin; //Original look direction used for reference
     private Quaternion lookTarget; //Rotation which player is currently trying to get to
 
-    private Vector3 moveTarget; //Player's current target velocity
+    private Vector3 moveTarget;       //Player's current target velocity
+    private Vector3 dashMoveTarget;   //Player target velocity for most recent dash
+    private float timeSinceDash = -1; //Time since player last dashed (negative if player is ready to dash again)
 
-    [SerializeField] private int playerHealth = 100; //The player's health attribute
+    //[SerializeField] private int playerHealth = 100; //The player's health attribute
     public int playerScore; //Score that depends on the items the player picks up
+    private bool pickingUpItem = false;  //Whether or not player is currently picking up an item
+    private float timeHoldingPickup = 0; //Time player has spent holding pickup button when in range of pickup
 
     public Vector3 interestedAreaBox = new Vector3(200, 200, 200); //The area in which the shark goes to when interested
+    public float playerViewingDistance = 100;
 
     //RUNTIME METHODS:
     private void Awake()
@@ -49,8 +67,9 @@ public class PlayerController : MonoBehaviour
         if (main == null) { main = this; } else { Destroy(this); } //Singleton-ize playerController script
 
         //Get objects & components:
-        if (!TryGetComponent(out playerInput)) Debug.LogError("Player object is missing PlayerInput script"); //Make sure player has input script
-        if (!TryGetComponent(out rb)) Debug.LogError("Player object does not have an attached RigidBody");    //Make sure player has rigidbody
+        if (!TryGetComponent(out playerInput)) Debug.LogError("Player object is missing PlayerInput script");                  //Make sure player has input script
+        if (!TryGetComponent(out rb)) Debug.LogError("Player object does not have an attached RigidBody");                     //Make sure player has rigidbody
+        if (pickupProgressIndicator == null) Debug.LogError("Make sure to assign PickupProgress UI element to player object"); //Make sure player has pickup progress indicator
 
     }
     private void Start()
@@ -60,12 +79,26 @@ public class PlayerController : MonoBehaviour
         lookTarget = transform.localRotation; //Use this for initial rotation target as well
 
         //Set look sensitivity from settings
-        //lookSensitivity.x = PlayerPrefs.GetFloat("MouseSensitivity");
-        //lookSensitivity.y = PlayerPrefs.GetFloat("MouseSensitivity");
+        lookSensitivity.x = PlayerPrefs.GetFloat("MouseSensitivity");
+        lookSensitivity.y = PlayerPrefs.GetFloat("MouseSensitivity");
     }
     private void Update()
     {
-        
+        //Item pickup sequence:
+        if (pickingUpItem) //Player is currently picking up an item
+        {
+            //Update pickup progress:
+            timeHoldingPickup += Time.deltaTime; //Increment pickup time
+            pickupProgressIndicator.value = Mathf.Min(1, timeHoldingPickup / pickupTime); //Display pickup progress on HUD
+
+            //Check for pickup procedure:
+            if (timeHoldingPickup >= pickupTime) //Player has held button long enough to pick up item
+            {
+                if (pickupsInRange.Count > 0) pickupsInRange[0].CollectItem(); //Collect oldest pickup in list
+                if (pickupsInRange.Count > 0) StartPickup();                   //Restart pickup counter if there are more objects to pick up
+                else CancelPickup();                                           //Stop pickup counter if everything in range of player is picked up
+            }
+        }
     }
     private void FixedUpdate()
     {
@@ -76,23 +109,32 @@ public class PlayerController : MonoBehaviour
             if (Vector3.Distance(transform.localRotation.eulerAngles, lookTarget.eulerAngles) < 0.001f) { transform.localRotation = lookTarget; } //Snap to target if close enough
         }
 
-        //Swimming:
-        if (rb.velocity != moveTarget) //Player is not currently traveling at target velocity
+        //Dashing:
+        Vector3 actualMoveTarget = Quaternion.LookRotation(transform.forward, transform.up) * moveTarget; //Get vector for actual move target (corrected by player rotation, available to be modified by dash if needed)
+        bool forceVelCalc = false; //Janky bool to make dashing work the way I want it
+        if (timeSinceDash >= 0) //Player is currently dashing
         {
-            if (moveTarget != Vector3.zero) //Player is using input to move in a direction
+            timeSinceDash += Time.fixedDeltaTime; //Increment dash time
+
+            //Time triggers:
+            if (timeSinceDash <= dashPeriod) //Dash is fully active and moveTarget needs to be modified
             {
-                Vector3 correctedMoveTarget = Quaternion.LookRotation(transform.forward, transform.up) * moveTarget;
-                rb.velocity = Vector3.Lerp(rb.velocity, correctedMoveTarget, swimAccel); //Lerp velocity (accelerate) toward target
+                //Adjust move target (to make dash feel smoother):
+                float moveTargetBlend = dashCurve.Evaluate(1 - (timeSinceDash / dashPeriod));       //Get interpolant for blending between actual move target velocity and modified dash velocity
+                actualMoveTarget = Vector3.Lerp(dashMoveTarget, actualMoveTarget, moveTargetBlend); //Blend between move target decided by inital dash and move target decided by current player input
+                forceVelCalc = true;
+            }
+            if (timeSinceDash >= dashCooldown) timeSinceDash = -1; //Indicate that player is no longer dashing once recharge time has been fulfilled
+        }
+
+        //Swimming:
+        if (rb.velocity != actualMoveTarget) //Player is not currently traveling at target velocity
+        {
+            if (moveTarget != Vector3.zero || forceVelCalc) //Player is using input to move in a direction (or is dashing)
+            {
+                rb.velocity = Vector3.Lerp(rb.velocity, actualMoveTarget, swimAccel); //Lerp velocity (accelerate) toward target
             }
         }
-    }
-
-    public void PickedUpItem(int score)
-    {
-        //Adds to score counter
-        playerScore += score;
-        Debug.Log("Score: " + playerScore);
-        LevelManager.main.UpdateScore(playerScore);
     }
 
     //INPUT METHODS:
@@ -131,7 +173,48 @@ public class PlayerController : MonoBehaviour
     }
     public void OnDash(InputAction.CallbackContext context)
     {
-        
+        if (context.started) //Dash button has been pushed
+        {
+            //Validity checks:
+            if (timeSinceDash != -1) return;              //Do not allow player to dash before cooldown has ended
+            if (CageController.main.playerInside) return; //Do not allow player to dash while inside cage
+
+            //Compute dash impulse:
+            Vector3 correctedMoveTarget = moveTarget.normalized;                                        //Get vector for normalized move target (determined by input)
+            if (moveTarget == Vector3.zero) correctedMoveTarget = Vector3.forward;                      //Default to dashing straight forward if player gives no specific input
+            dashMoveTarget = correctedMoveTarget * dashForce;                                           //Apply dash force to normalized move target (save for velocity calculations later)
+            dashMoveTarget = Quaternion.LookRotation(transform.forward, transform.up) * dashMoveTarget; //Rotate move target to align with player's facing direction
+            rb.AddForce(dashMoveTarget, ForceMode.Impulse);                                             //Apply dash vector to player rigidbody as instantaneous acceleration
+
+            //Cleanup:
+            timeSinceDash = 0; //Indicate that player is now dashing
+        }
+    }
+    public void OnPickUp(InputAction.CallbackContext context)
+    {
+        //Check for game end:
+        if (CageController.main.playerInside &&           //Player is inside cage
+            LevelSequencer.main.phase == LevelPhase.Hunt) //Game is in Hunt phase
+        {
+            LevelSequencer.main.ProgressSequence(); //Progress game sequence
+        }
+
+        //Check for item pickup:
+        if (context.started && pickupsInRange.Count > 0) StartPickup(); //Indicate that player is picking up item
+        if (context.canceled) CancelPickup();                           //Stop picking up item if control is released
+    }
+
+    private void StartPickup()
+    {
+        pickingUpItem = true;                               //Indicate item is being picked up
+        timeHoldingPickup = 0;                              //Reset pickup time
+        pickupProgressIndicator.gameObject.SetActive(true); //Show progress indicator
+    }
+    public void CancelPickup()
+    {
+        pickingUpItem = false;                               //Indicate no items are being picked up
+        timeHoldingPickup = 0;                               //Reset pickup time
+        pickupProgressIndicator.gameObject.SetActive(false); //Hide progress indicator
     }
 
 #if UNITY_EDITOR
@@ -140,6 +223,8 @@ public class PlayerController : MonoBehaviour
         //Display the box that the shark spawns nodes at when interested
         Gizmos.color = Color.white;
         Gizmos.DrawWireCube(transform.position, interestedAreaBox);
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(transform.position, transform.forward * playerViewingDistance);
     }
 #endif
 }

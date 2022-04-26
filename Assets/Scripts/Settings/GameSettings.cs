@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameSettings
 {
-    private bool isFullScreen;
+    private bool isFullScreen, vSyncEnabled;
     private Resolution currentResolution;
     private GraphicsQuality graphicsQuality;
 
@@ -22,6 +22,9 @@ public class GameSettings
 
     public bool GetIsFullScreen() { return isFullScreen; }
     public void SetIsFullScreen(bool fullScreen) { isFullScreen = fullScreen; }
+
+    public bool GetVSyncEnabled() { return vSyncEnabled; }
+    public void SetVSyncEnabled(bool vSync) { vSyncEnabled = vSync; }
 
     public Resolution GetCurrentResolution() { return currentResolution; }
     public void SetCurrentResolution(Resolution res) { currentResolution = res; }

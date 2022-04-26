@@ -5,6 +5,7 @@ using UnityEngine;
 public class SharkController : MonoBehaviour
 {
     [SerializeField] private float sharkWidth = 20;
+    [SerializeField] private float sharkTeleportationBuffer = 40; //The extra amount of distance to spawn outside of the player's vision
 
     [Header("Shark Speeds")]
     [SerializeField] private float speed = 5; //The speed of the shark's movement
@@ -20,20 +21,24 @@ public class SharkController : MonoBehaviour
 
     [Header("Shark Attack Values")]
     [SerializeField] private float attackRadius = 5; //The radius in front of the shark where the player is attacked in
-    [SerializeField] private float initialAttackPower = 5; //The amount of damage the shark initially deals
-    [SerializeField] private float currentAttackPower; //The amount of damage the shark currently deals
-    [SerializeField] private float attackMultiplier = 1.25f; //The longer the player is being damaged by the shark, the more damage is dealt
+    //[SerializeField] private float initialAttackPower = 5; //The amount of damage the shark initially deals
+    //[SerializeField] private float currentAttackPower; //The amount of damage the shark currently deals
+    //[SerializeField] private float attackMultiplier = 1.25f; //The longer the player is being damaged by the shark, the more damage is dealt
 
     [SerializeField] private float detectionRadius = 60;
 
     [Header("Shark Timers")]
     [Range(0, 60)]
+    [SerializeField] private float timeUntilUnknown = 5;
+    [Range(0, 60)]
     [SerializeField] private float timeUntilInterested = 5;
     [Range(0, 60)]
     [SerializeField] private float timeUntilThreatened = 5;
+    [Range(0, 60)]
+    [SerializeField] private float timeUntilTeleport = 20;
     [SerializeField] private float dashTimer = 5;
     [Range(0, 60)]
-    [SerializeField] private float threatenedCooldown = 20;
+    [SerializeField] private float threatLevelCooldown = 20;
 
     private float currentSpeed;
     private float currentRotSpeed;
@@ -44,38 +49,65 @@ public class SharkController : MonoBehaviour
 
     private bool nodeGenerated = false;
     private bool playerLockedOn;
-    private bool isMoving, isInSensor, alarmStarted;
+    internal bool canMove = true;
+    private bool isInSensor, alarmStarted;
     private float currentAlarmTimer;
+    private Rigidbody sharkRb;
 
-    internal IEnumerator raiseAlarmCoroutine, threatenedCooldownCoroutine, dashCoroutine, playerNodeSpawnCoroutine;
+    internal IEnumerator raiseAlarmCoroutine, interestedCooldownCoroutine, threatenedCooldownCoroutine, dashCoroutine, playerNodeSpawnCoroutine, unknownCounterCoroutine, teleportCounterCoroutine;
 
     [HideInInspector]
-    public enum ThreatLevel { WANDERING, INTEREST, THREATENED }
+    public enum ThreatLevel { WANDERING = 1, INTEREST, THREATENED, HOMICIDAL, NumberOfThreatLevels = 4 }
     public ThreatLevel currentThreatLevel;
+    private bool startUnknownThreatCountdown, makeThreatUnknown;
+    private bool startedTeleportCountdown;
+
+    public static SharkController main;
 
     // Start is called before the first frame update
+    private void Awake()
+    {
+        if (main == null) { main = this; } else { Destroy(gameObject); } //Singleton-ize
+    }
     void Start()
     {
-        isMoving = true;
+        sharkRb = GetComponent<Rigidbody>();
         alarmStarted = false;
         currentSpeed = speed;
         currentRotSpeed = rotSpeed;
         currentLookAtSpeed = lookAtSpeed;
         playerLockedOn = false;
+        makeThreatUnknown = false;
         currentThreatLevel = ThreatLevel.WANDERING;
         LevelManager.main.UpdateThreatUI((int)currentThreatLevel);
         raiseAlarmCoroutine = RaiseAlarm();
+        interestedCooldownCoroutine = InterestedCooldown();
         threatenedCooldownCoroutine = ThreatenedCooldown();
         dashCoroutine = DashAtSpeed();
         playerNodeSpawnCoroutine = SpawnNodesOnPlayer();
+        unknownCounterCoroutine = StartUnknownCountdown();
+        teleportCounterCoroutine = StartTeleportCountdown();
     }
 
     // Update is called once per frame
     void Update()
     {
+
         //If the shark is moving
-        if (isMoving)
+        if (canMove)
         {
+            if (IsSharkVisibleFromCamera())
+            {
+                Debug.Log("Player Can See Shark! Holy Heck!");
+                UnhideThreatLevel();
+                ResetTeleportCounter();
+            }
+            else
+            {
+                HideThreatLevel();
+                CheckForTeleport();
+            }
+
             //Check attack sensor before everything
             CheckAttackSensor();
 
@@ -84,7 +116,8 @@ public class SharkController : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotTarget, currentRotSpeed * Time.deltaTime);
 
             //Always move the shark forward
-            transform.position += transform.forward * currentSpeed * Time.deltaTime;
+            //transform.position += transform.forward * currentSpeed * Time.deltaTime;
+            sharkRb.velocity = transform.forward * currentSpeed;
             rotTarget = Quaternion.LookRotation(targetPos - transform.position);
             Debug.DrawLine(transform.position, targetPos, Color.red);
 
@@ -105,8 +138,78 @@ public class SharkController : MonoBehaviour
             //Check the body sensor if they are not threatened
             CheckBodySensor();
         }
+        else
+        {
+            sharkRb.velocity = Vector3.zero;
+        }
 
         Debug.DrawLine(PlayerController.main.transform.position, transform.position, Color.cyan);
+    }
+
+    private bool IsSharkVisibleFromCamera()
+    {
+        var planes = GeometryUtility.CalculateFrustumPlanes(PlayerController.main.playerCam);
+        var point = transform.position;
+
+        foreach(var plane in planes)
+        {
+            if(plane.GetDistanceToPoint(point) < 0)
+            {
+                return false;
+            }
+        }
+
+        //If the shark is visible, return true based on the viewing distance between the player and shark
+        return Vector3.Distance(PlayerController.main.transform.position, transform.position) < PlayerController.main.playerViewingDistance;
+    }
+
+    private void HideThreatLevel()
+    {
+        if (currentThreatLevel == ThreatLevel.WANDERING)
+        {
+            if (!startUnknownThreatCountdown)
+            {
+                StartCoroutine(unknownCounterCoroutine);
+                startUnknownThreatCountdown = true;
+            }
+        }
+        else
+        {
+            UnhideThreatLevel();
+        }
+    }
+
+    private void CheckForTeleport()
+    {
+        //If the threat is unknown
+        if (makeThreatUnknown)
+        {
+            if (!startedTeleportCountdown)
+            {
+                StartCoroutine(teleportCounterCoroutine);
+                startedTeleportCountdown = true;
+            }
+        }
+    }
+
+    private void ResetTeleportCounter()
+    {
+        StopCoroutine(teleportCounterCoroutine);
+        teleportCounterCoroutine = StartTeleportCountdown();
+
+        startedTeleportCountdown = false;
+    }
+
+    private void UnhideThreatLevel()
+    {
+        makeThreatUnknown = false;
+        startUnknownThreatCountdown = false;
+        //Update the UI
+        LevelManager.main.UpdateThreatUI((int)currentThreatLevel);
+
+        //Stop and reset coroutine
+        StopCoroutine(unknownCounterCoroutine);
+        unknownCounterCoroutine = StartUnknownCountdown();
     }
 
     private void SmoothLookAt(Quaternion targetRotation)
@@ -195,6 +298,65 @@ public class SharkController : MonoBehaviour
         }
     }
 
+    IEnumerator StartUnknownCountdown()
+    {
+        Debug.Log("Starting Unknown Countdown...");
+        float currentTimer = 0;
+
+        while (currentTimer < timeUntilUnknown)
+        {
+            currentTimer += Time.deltaTime;
+            yield return null;
+        }
+
+        Debug.Log("Hide Threat Level");
+        makeThreatUnknown = true;
+        LevelManager.main.UpdateThreatUI(0);
+        unknownCounterCoroutine = StartUnknownCountdown();
+    }
+
+    IEnumerator StartTeleportCountdown()
+    {
+        Debug.Log("Starting Teleport Countdown...");
+        float currentTimer = 0;
+
+        while (currentTimer < timeUntilTeleport)
+        {
+            currentTimer += Time.deltaTime;
+            yield return null;
+        }
+
+        Debug.Log("Teleport To Player");
+        TeleportInFrontOfPlayer();
+        teleportCounterCoroutine = StartTeleportCountdown();
+
+        //Start teleport coroutine again
+        StartCoroutine(teleportCounterCoroutine);
+    }
+
+    private void TeleportInFrontOfPlayer()
+    {
+        Vector3 teleportPos = PlayerController.main.transform.position + (PlayerController.main.transform.forward * (PlayerController.main.playerViewingDistance + sharkTeleportationBuffer));
+
+        //If the shark's teleport position is less than 60, spawn her high enough so she doesn't spawn below the ground or right underneath the player
+        if (teleportPos.y < 55)
+            teleportPos.y = 200;
+
+        transform.position = teleportPos;
+
+        float randomFloat = Random.value;
+
+        Quaternion sharkRotation = PlayerController.main.transform.rotation;
+
+        //Two-thirds chance of the shark being turned perpendicular the player
+        if (randomFloat > 0.333f)
+        {
+            sharkRotation.y = sharkRotation.y + 90;
+        }
+
+        transform.rotation = sharkRotation;
+    }
+
     IEnumerator DashAtSpeed()
     {
         //Every few seconds, dash for half a second
@@ -220,12 +382,13 @@ public class SharkController : MonoBehaviour
     private void CheckAttackSensor()
     {
         //If the player is currently in the shark's body sensor, start raising an alarm
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position + transform.forward * 10, attackRadius, LayerMask.GetMask("Player"));
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position + transform.forward * (sharkWidth / 2), attackRadius, LayerMask.GetMask("Player"));
         if (hitColliders.Length != 0)
         {
             Debug.Log("Player Has Been Attacked! Game Over!");
 
             //Stop the current threat music
+            Cursor.visible = true;
             LevelManager.main.StopThreatMusic((int)currentThreatLevel);
             LevelManager.main.GameOver();
         }
@@ -281,16 +444,33 @@ public class SharkController : MonoBehaviour
         raiseAlarmCoroutine = RaiseAlarm();
     }
 
-    public IEnumerator ThreatenedCooldown()
+    public IEnumerator InterestedCooldown()
     {
         float timer = 0;
-        Debug.Log("Cooldown Timer Started...");
-        while (timer < threatenedCooldown)
+        Debug.Log("Interested Cooldown Timer Started...");
+        while (timer < threatLevelCooldown)
         {
             timer += Time.deltaTime;
             yield return null;
         }
         SetThreatLevel(ThreatLevel.WANDERING);
+    }
+
+    public IEnumerator ThreatenedCooldown()
+    {
+        float timer = 0;
+        Debug.Log("Threatened Cooldown Timer Started...");
+        while (timer < threatLevelCooldown)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        SetThreatLevel(ThreatLevel.WANDERING);
+    }
+
+    public void ResetInterestedCooldown()
+    {
+        interestedCooldownCoroutine = InterestedCooldown();
     }
 
     public void ResetThreatenedCooldown()
@@ -301,13 +481,14 @@ public class SharkController : MonoBehaviour
     public ThreatLevel GetThreatLevel() { return currentThreatLevel; }
     public void SetThreatLevel(ThreatLevel threatLevel)
     {
-        if(threatLevel != currentThreatLevel)
-        {
-            //Stop the current threat music before beginning a new one
-            LevelManager.main.StopThreatMusic((int)currentThreatLevel);
-            LevelManager.main.StartThreatMusic((int)threatLevel);
-        }
         currentThreatLevel = threatLevel;
+
+        //If the correct threat SFX is not playing, play it 
+        if (FindObjectOfType<AudioManager>() != null && !FindObjectOfType<AudioManager>().IsPlaying("Heartbeat" + (int)currentThreatLevel))
+        {
+            LevelManager.main.StartThreatMusic((int)currentThreatLevel);
+        }
+
         switch (currentThreatLevel)
         {
             case ThreatLevel.WANDERING:
@@ -317,10 +498,12 @@ public class SharkController : MonoBehaviour
             case ThreatLevel.INTEREST:
                 //Debug.Log("Threat Level: Interested");
                 DestroyAllNodes();
+                UnhideThreatLevel();
                 RemoveThreatSettings();
                 break;
             case ThreatLevel.THREATENED:
                 //Debug.Log("Threat Level: Threatened");
+                UnhideThreatLevel();
                 break;
         }
 

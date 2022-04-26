@@ -16,6 +16,7 @@ public class LevelManager : MonoBehaviour
     public bool isGameOver;
 
     private AudioManager audioManager;
+
     private void Awake()
     {
         main = this;
@@ -29,7 +30,6 @@ public class LevelManager : MonoBehaviour
         {
             GameManager.instance.playingSongName = "InGame";
             FindObjectOfType<AudioManager>().Play(GameManager.instance.playingSongName, PlayerPrefs.GetFloat("BGMVolume"));
-            StartThreatMusic(0);
         }
     }
 
@@ -47,8 +47,20 @@ public class LevelManager : MonoBehaviour
     {
         if (audioManager != null)
         {
-            Debug.Log("Starting Heartbeat" + (level + 1));
-            FindObjectOfType<AudioManager>().Play("Heartbeat" + (level + 1), PlayerPrefs.GetFloat("SFXVolume"));
+            Debug.Log("Starting Heartbeat" + level);
+            for(int i = 0; i < (int)SharkController.ThreatLevel.NumberOfThreatLevels; i++)
+            {
+                if(i != level)
+                {
+                    //If there's another heartbeat SFX playing, stop it
+                    FindObjectOfType<AudioManager>().Stop("Heartbeat" + i);
+                }
+                //Play the wanted heartbeat SFX
+                else
+                {
+                    FindObjectOfType<AudioManager>().Play("Heartbeat" + level, PlayerPrefs.GetFloat("SFXVolume"));
+                }
+            }
         }
     }
 
@@ -56,7 +68,7 @@ public class LevelManager : MonoBehaviour
     {
         if (audioManager != null)
         {
-            FindObjectOfType<AudioManager>().Stop("Heartbeat" + (level + 1));
+            FindObjectOfType<AudioManager>().Stop("Heartbeat" + level);
         }
     }
 

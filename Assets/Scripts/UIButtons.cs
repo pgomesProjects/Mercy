@@ -1,40 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class UIButtons : MonoBehaviour
 {
-    private Button button;
-    //private GameManager gameManager;
-
-    /*public int difficulty;*/
-
-    // Start is called before the first frame update
-    void Start()
+    public void OnHoverSFX()
     {
-        button = GetComponent<Button>();
-        //gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        button.onClick.AddListener(StartGame);
-
+        if (FindObjectOfType<AudioManager>() != null) //Scene has audio manager
+        {
+            FindObjectOfType<AudioManager>().Play("UIHover", PlayerPrefs.GetFloat("SFXVolume"));
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnClickSFX()
     {
-        
-    }
-    void StartGame()
-    {
-        SceneManager.LoadScene("GomesScene");
-        //gameManager.StartGame(difficulty);
-        
+        if (FindObjectOfType<AudioManager>() != null) //Scene has audio manager
+        {
+            FindObjectOfType<AudioManager>().Play("UIClick", PlayerPrefs.GetFloat("SFXVolume"));
+        }
     }
 
-    /*void QuitGame()
+    public void StoryOnClickSFX()
     {
-        Application.Quit();
-        Debug.Log("Quit!");
-    }*/
+        if (FindObjectOfType<AudioManager>() != null) //Scene has audio manager
+        {
+            FindObjectOfType<AudioManager>().Play("StoryUIClick", PlayerPrefs.GetFloat("SFXVolume"));
+        }
+    }
 }

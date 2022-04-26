@@ -1,5 +1,5 @@
 {
-    "name": "PlayerActions",
+    "name": "PlayerActionsMap",
     "maps": [
         {
             "name": "Player",
@@ -45,6 +45,15 @@
                     "name": "PickUp",
                     "type": "Button",
                     "id": "08e020a6-70b4-45df-bad6-2d3d0e4f2f0f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "c5876357-3931-4269-9533-a4fbf16577ea",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press",
@@ -242,7 +251,7 @@
                 {
                     "name": "positive",
                     "id": "44fa8772-d915-4520-9ace-32d4f092ef6e",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -253,7 +262,7 @@
                 {
                     "name": "",
                     "id": "ed22a3b3-9819-4588-b8ce-a92f6d14e138",
-                    "path": "<Keyboard>/leftShift",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -269,6 +278,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "PickUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "31ee788f-9de3-48cf-b883-4ef20d4c76c4",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "316b27d4-c8c7-43d4-8f53-929f4324c43d",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
