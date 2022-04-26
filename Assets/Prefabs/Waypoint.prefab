@@ -48,5 +48,6 @@ MonoBehaviour:
       item:
         icon: {fileID: 21300000, guid: cd360fbe5f013de4ea24b4a423d7a462, type: 3}
         heightOffset: 2.5
-      interactDistance: 30
+      interactDistance: 3
+      maxDistance: 50
       useEffects: 0

@@ -8,6 +8,7 @@ public class WaypointBaseController
     {
         public WaypointItem item;
         public float interactDistance;
+        public float maxDistance;
         public bool useEffects;
     }
 

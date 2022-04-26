@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Other:")]
     [SerializeField] [Tooltip("How long player takes to pick up an item")] private float pickupTime;
+    [SerializeField] [Tooltip("How long player takes to lose one percent of oxygen per second")] private float oxygenDepletionRate;
 
     //Runtime Memory Vars:
     private Vector2 mouseRotation; //Cumulative angular rotation generated from mouse movements
@@ -56,6 +57,8 @@ public class PlayerController : MonoBehaviour
     public int playerScore; //Score that depends on the items the player picks up
     private bool pickingUpItem = false;  //Whether or not player is currently picking up an item
     private float timeHoldingPickup = 0; //Time player has spent holding pickup button when in range of pickup
+    internal float oxygenPercentage = 100; //Player oxygen level
+    private float currentOxygenTimer;
 
     public Vector3 interestedAreaBox = new Vector3(200, 200, 200); //The area in which the shark goes to when interested
     internal Vector3 originalInterestedAreaBox;
@@ -103,6 +106,9 @@ public class PlayerController : MonoBehaviour
                 else CancelPickup();                                           //Stop pickup counter if everything in range of player is picked up
             }
         }
+
+        //Update player oxygen levels
+        OxygenTimer();
     }
     private void FixedUpdate()
     {
@@ -138,6 +144,27 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = Vector3.Lerp(rb.velocity, actualMoveTarget, swimAccel); //Lerp velocity (accelerate) toward target
             }
+        }
+    }
+
+    private void OxygenTimer()
+    {
+        if(oxygenPercentage > 0)
+        {
+            currentOxygenTimer += Time.deltaTime;
+            oxygenPercentage -= oxygenDepletionRate * Time.deltaTime;
+            Debug.Log("Oxygen At " + oxygenPercentage + "%");
+
+            if (currentOxygenTimer > oxygenDepletionRate)
+            {
+                currentOxygenTimer = 0;
+            }
+
+            LevelManager.main.UpdateOxygenBar(oxygenPercentage);
+        }
+        else
+        {
+            Debug.Log("Player Is Out Of Oxygen!");
         }
     }
 

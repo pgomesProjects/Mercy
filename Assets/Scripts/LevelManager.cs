@@ -11,6 +11,8 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private Image threatUI;
     [SerializeField] private Color[] threatColors;
+    [SerializeField] private TextMeshProUGUI personalBestText;
+    [SerializeField] private Slider oxygenBar;
 
     public TextMeshProUGUI scoreText;
     public bool isGameOver;
@@ -31,11 +33,18 @@ public class LevelManager : MonoBehaviour
             GameManager.instance.playingSongName = "InGame";
             FindObjectOfType<AudioManager>().Play(GameManager.instance.playingSongName, PlayerPrefs.GetFloat("BGMVolume"));
         }
+
+        personalBestText.text = "Personal Best: " + PlayerPrefs.GetInt("HighScore");
     }
 
     public void UpdateScore(int score)
     {
         scoreText.text = "Score: " + score;
+    }
+
+    public void UpdateOxygenBar(float oxygenPercentage)
+    {
+        oxygenBar.value = oxygenPercentage;
     }
 
     public void UpdateThreatUI(int level)

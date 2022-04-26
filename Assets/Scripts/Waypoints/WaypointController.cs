@@ -21,10 +21,16 @@ public class WaypointController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(controller.GetDistance(transform.position, controller.data.item.target.transform.position) < controller.data.interactDistance)
+        //If the player is too close to the waypoint
+        if(controller.GetDistance(transform.position, controller.data.item.target.transform.position) < (controller.data.interactDistance * 10))
         {
             controller.EnableWaypoint(false);
             controller.EnableEffect(true);
+        }
+        //If the player is too far from the waypoint
+        else if (controller.GetDistance(transform.position, controller.data.item.target.transform.position) > (controller.data.maxDistance * 10) )
+        {
+            controller.EnableWaypoint(false);
         }
         else
         {

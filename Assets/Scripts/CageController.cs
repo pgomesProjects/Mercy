@@ -100,7 +100,7 @@ public class CageController : MonoBehaviour
     /// </summary>
     public void ReleasePlayer()
     {
-        PlayerController.main.transform.parent = null; //Unchild player from cage
+        //PlayerController.main.transform.parent = null; //Unchild player from cage
         ToggleDoor(true);                              //Open cage door
     }
 
