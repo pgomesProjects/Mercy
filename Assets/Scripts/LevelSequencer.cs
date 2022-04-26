@@ -26,6 +26,7 @@ public class LevelSequencer : MonoBehaviour
     [SerializeField] [Tooltip("Position which dive cage will move toward during entry sequence")] private Transform cageDescendTarget;
     [SerializeField] [Tooltip("Image used to block player's view when necessary")]                private Image blackoutScreen;
     [SerializeField][Tooltip("CanvasGroup used to show / hide the player's HUD")]                 private CanvasGroup playerIndicator;
+    [SerializeField][Tooltip("CanvasGroup used to show / hide the waypoint HUD")]                 private CanvasGroup waypointIndicator;
 
     //Settings:
     [Header("Entry Sequence Settings:")]
@@ -190,12 +191,21 @@ public class LevelSequencer : MonoBehaviour
             if (fadeType) fadeAmount = 1 - fadeAmount; //Reverse fade amount when fading in (make indicator more transparent as time progresses)
             startingAlpha = fadeAmount;                   //Set new alpha for indicator
             playerIndicator.alpha = startingAlpha;           //Apply new alpha
+            waypointIndicator.alpha = startingAlpha;
             yield return null;                         //Wait until next frame
         }
 
         //Finish fade:
-        if (fadeType) playerIndicator.alpha = 0; //Make indicator fully transparent if fading in
-        else playerIndicator.alpha = 1;          //Make indicator fully opaque if fading out
+        if (fadeType)
+        {
+            playerIndicator.alpha = 0; //Make indicator fully transparent if fading in
+            waypointIndicator.alpha = 0;
+        }
+        else
+        {
+            playerIndicator.alpha = 1;          //Make indicator fully opaque if fading out
+            waypointIndicator.alpha = 1;
+        }
     }
 
     //SEQUENCE METHODS:

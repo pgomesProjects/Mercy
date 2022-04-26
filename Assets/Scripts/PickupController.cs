@@ -64,6 +64,7 @@ public class PickupController : MonoBehaviour
             PlayerController.main.playerScore += scoreValue;
             Debug.Log("Score: " + PlayerController.main.playerScore);
             LevelManager.main.UpdateScore(PlayerController.main.playerScore);
+            SharkController.main.UpdateAggression();
             PlayerController.pickupsInRange.Remove(this);
             Destroy(gameObject);
         }
