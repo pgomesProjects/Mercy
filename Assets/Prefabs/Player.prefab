@@ -132,10 +132,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c662c4cbf0da0944e9868af2239f324d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseSwimSpeed: 100
-  ascendSpeed: 40
-  descendSpeed: 70
+  playerCam: {fileID: 1130405230100577287}
+  pickupProgressIndicator: {fileID: 0}
+  baseSwimSpeed: 60
+  ascendSpeed: 25
+  descendSpeed: 30
   swimAccel: 0.186
+  dashForce: 200
+  dashPeriod: 0.75
+  dashCooldown: 1.2
   swimDirModCurve:
     serializedVersion: 2
     m_Curve:
@@ -160,11 +165,46 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  dashCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1.3512022
+      outSlope: 0
+      tangentMode: 65
+      weightedMode: 2
+      inWeight: 0
+      outWeight: 0.4261703
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: -0
+      outSlope: 0.008414456
+      tangentMode: 5
+      weightedMode: 3
+      inWeight: 0.25228903
+      outWeight: 0.81336737
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -4.7129207
+      outSlope: -4.7129207
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.05405414
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   lookSensitivity: {x: 0.15, y: 0.15}
   lookDamping: 0.2
   verticalLookLimits: {x: -75, y: 74}
-  playerHealth: 1
+  pickupTime: 1.5
   playerScore: 0
+  interestedAreaBox: {x: 200, y: 15, z: 200}
+  playerViewingDistance: 370
 --- !u!114 &1130405230645989019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,7 +335,19 @@ MonoBehaviour:
     m_ActionId: d07c4658-ccaa-4fc3-b673-caa4cdbc44a5
     m_ActionName: Player/Dash[/Keyboard/leftShift]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1130405230645989016}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnPickUp
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 08e020a6-70b4-45df-bad6-2d3d0e4f2f0f
     m_ActionName: Player/PickUp[/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
