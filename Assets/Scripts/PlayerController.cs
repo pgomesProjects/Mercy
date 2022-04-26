@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
     private float timeHoldingPickup = 0; //Time player has spent holding pickup button when in range of pickup
 
     public Vector3 interestedAreaBox = new Vector3(200, 200, 200); //The area in which the shark goes to when interested
+    internal Vector3 originalInterestedAreaBox;
     public float playerViewingDistance = 100;
 
     //RUNTIME METHODS:
@@ -77,6 +78,9 @@ public class PlayerController : MonoBehaviour
         //Initialization:
         lookOrigin = transform.localRotation; //Get initial player rotation
         lookTarget = transform.localRotation; //Use this for initial rotation target as well
+
+        //Save the Vector3 for the area box, since the shark's aggression will change this
+        originalInterestedAreaBox = interestedAreaBox;
 
         //Set look sensitivity from settings
         lookSensitivity.x = PlayerPrefs.GetFloat("MouseSensitivity");
