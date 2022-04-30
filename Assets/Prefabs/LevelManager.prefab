@@ -46,9 +46,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threatUI: {fileID: 0}
   threatColors:
+  - {r: 0.16862746, g: 0.16862746, b: 0.16862746, a: 0.5882353}
   - {r: 0.4117647, g: 1, b: 0.46666667, a: 0.36078432}
   - {r: 1, g: 0.7764706, b: 0.20392157, a: 0.5882353}
   - {r: 1, g: 0.20392157, b: 0.21960784, a: 0.92156863}
+  - {r: 0.5764706, g: 0, b: 0, a: 0.92156863}
+  personalBestText: {fileID: 0}
+  oxygenBar: {fileID: 0}
+  oxygenText: {fileID: 0}
   scoreText: {fileID: 0}
   isGameOver: 0
 --- !u!114 &3845428981221293299
@@ -65,7 +70,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cageDescendTarget: {fileID: 0}
   blackoutScreen: {fileID: 0}
-  cageDescendTime: 16
+  playerIndicator: {fileID: 0}
+  waypointIndicator: {fileID: 0}
+  cageDescendTime: 5
   cageDescendCurve:
     serializedVersion: 2
     m_Curve:

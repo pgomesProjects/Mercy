@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     private bool pickingUpItem = false;  //Whether or not player is currently picking up an item
     private float timeHoldingPickup = 0; //Time player has spent holding pickup button when in range of pickup
     internal float oxygenPercentage = 100; //Player oxygen level
-    private float currentOxygenTimer;
+    internal bool oxygenIsDepleting;
 
     public Vector3 interestedAreaBox = new Vector3(200, 200, 200); //The area in which the shark goes to when interested
     internal Vector3 originalInterestedAreaBox;
@@ -107,8 +107,9 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //Update player oxygen levels
-        OxygenTimer();
+        //Update player oxygen levels if the oxygen is depleting
+        if(oxygenIsDepleting)
+            OxygenTimer();
     }
     private void FixedUpdate()
     {
@@ -149,19 +150,17 @@ public class PlayerController : MonoBehaviour
 
     private void OxygenTimer()
     {
+        //If the oxygen percentage is greater than 0, constantly deplete it
         if(oxygenPercentage > 0)
         {
-            currentOxygenTimer += Time.deltaTime;
-            oxygenPercentage -= oxygenDepletionRate * Time.deltaTime;
-            Debug.Log("Oxygen At " + oxygenPercentage + "%");
+            oxygenPercentage -= (1 / oxygenDepletionRate) * Time.deltaTime;
 
-            if (currentOxygenTimer > oxygenDepletionRate)
-            {
-                currentOxygenTimer = 0;
-            }
+            //Debug.Log("Oxygen At " + oxygenPercentage + "%");
 
+            //Always update the oxygen bar
             LevelManager.main.UpdateOxygenBar(oxygenPercentage);
         }
+        //The player is out of oxygen
         else
         {
             Debug.Log("Player Is Out Of Oxygen!");

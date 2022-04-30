@@ -13,6 +13,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Color[] threatColors;
     [SerializeField] private TextMeshProUGUI personalBestText;
     [SerializeField] private Slider oxygenBar;
+    [SerializeField] private TextMeshProUGUI oxygenText;
 
     public TextMeshProUGUI scoreText;
     public bool isGameOver;
@@ -44,7 +45,13 @@ public class LevelManager : MonoBehaviour
 
     public void UpdateOxygenBar(float oxygenPercentage)
     {
+        //If the oxygen value is less than 0, simply display it as 0
+        if (oxygenPercentage < 0)
+            oxygenPercentage = 0;
+
+        //Update slider and text
         oxygenBar.value = oxygenPercentage;
+        oxygenText.text = "O2: " + ((int)oxygenPercentage).ToString() + "%";
     }
 
     public void UpdateThreatUI(int level)
