@@ -188,7 +188,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 10
+  m_Radius: 6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4771788278167373918
 MonoBehaviour:
@@ -204,3 +204,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreValue: 10
   massInPounds: 0
+  litMat: {fileID: 2100000, guid: aa015104d998bf243b953f9db18aefe9, type: 2}

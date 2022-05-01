@@ -6,10 +6,14 @@ public class PickupController : MonoBehaviour
 {
     [SerializeField] private int scoreValue;
     [SerializeField] private float massInPounds;
+    [SerializeField] private Material litMat;
 
+    private MeshRenderer rnd;
     internal bool canBeCollected;
     private Light selectionLight;
     private PlayerActionsMap playerActions;
+    private Material origMat;
+
     private void Awake()
     {
         playerActions = new PlayerActionsMap();
@@ -21,6 +25,8 @@ public class PickupController : MonoBehaviour
     {
         canBeCollected = false;
         selectionLight = transform.Find("SelectionLight").GetComponent<Light>();
+        rnd = GetComponent<MeshRenderer>();
+        origMat = rnd.material;
     }
 
     private void OnEnable()
@@ -39,8 +45,9 @@ public class PickupController : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             canBeCollected = true;
-            selectionLight.gameObject.SetActive(true);
+            //selectionLight.gameObject.SetActive(true);
             PlayerController.pickupsInRange.Add(this);
+            rnd.material = litMat;
         }
     }
 
@@ -50,8 +57,9 @@ public class PickupController : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             canBeCollected = false;
-            selectionLight.gameObject.SetActive(false);
+            //selectionLight.gameObject.SetActive(false);
             PlayerController.pickupsInRange.Remove(this);
+            rnd.material = origMat;
             if (PlayerController.pickupsInRange.Count == 0) PlayerController.main.CancelPickup(); //Make sure to cancel pickup procedure if this was the only item in range of player
         }
     }
