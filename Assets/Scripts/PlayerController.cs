@@ -42,7 +42,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Other:")]
     [SerializeField] [Tooltip("How long player takes to pick up an item")] private float pickupTime;
-    [SerializeField] [Tooltip("How long player takes to lose one percent of oxygen per second")] private float oxygenDepletionRate;
+    [SerializeField] [Tooltip("How long player takes to lose one percent of oxygen per second normally")] private float defaultOxygenDepletionRate;
+    [SerializeField] [Tooltip("How long player takes to lose one percent of oxygen per second when dashing")] private float dashOxygenDepletionRate;
 
     //Runtime Memory Vars:
     private Vector2 mouseRotation; //Cumulative angular rotation generated from mouse movements
@@ -59,6 +60,7 @@ public class PlayerController : MonoBehaviour
     private float timeHoldingPickup = 0; //Time player has spent holding pickup button when in range of pickup
     internal float oxygenPercentage = 100; //Player oxygen level
     internal bool oxygenIsDepleting;
+    private float currentDepletionRate;
 
     public Vector3 interestedAreaBox = new Vector3(200, 200, 200); //The area in which the shark goes to when interested
     internal Vector3 originalInterestedAreaBox;
@@ -150,10 +152,20 @@ public class PlayerController : MonoBehaviour
 
     private void OxygenTimer()
     {
+        //If dashing, set the depletion rate to the dash depletion rate
+        if (timeSinceDash >= 0 && timeSinceDash <= dashPeriod)
+        {
+            if (currentDepletionRate != dashOxygenDepletionRate)
+                currentDepletionRate = dashOxygenDepletionRate;
+        }
+        //If not, set the depletion rate to the default depletion rate
+        else if(currentDepletionRate != defaultOxygenDepletionRate)
+            currentDepletionRate = defaultOxygenDepletionRate;
+
         //If the oxygen percentage is greater than 0, constantly deplete it
         if(oxygenPercentage > 0)
         {
-            oxygenPercentage -= (1 / oxygenDepletionRate) * Time.deltaTime;
+            oxygenPercentage -= (1 / currentDepletionRate) * Time.deltaTime;
 
             //Debug.Log("Oxygen At " + oxygenPercentage + "%");
 

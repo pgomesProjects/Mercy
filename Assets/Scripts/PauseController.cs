@@ -44,7 +44,7 @@ public class PauseController : MonoBehaviour
             Time.timeScale = 0;
             if(FindObjectOfType<AudioManager>() != null)
             {
-                FindObjectOfType<AudioManager>().Pause(GameManager.instance.playingSongName);
+                FindObjectOfType<AudioManager>().Pause(GameData.playingSongName);
                 LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel);
             }
         }
@@ -54,7 +54,7 @@ public class PauseController : MonoBehaviour
             Time.timeScale = 1;
             if (FindObjectOfType<AudioManager>() != null)
             {
-                FindObjectOfType<AudioManager>().Resume(GameManager.instance.playingSongName);
+                FindObjectOfType<AudioManager>().Resume(GameData.playingSongName);
                 LevelManager.main.StartThreatMusic((int)SharkController.main.currentThreatLevel);
             }
         }

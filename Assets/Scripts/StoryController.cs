@@ -24,11 +24,21 @@ public class StoryController : MonoBehaviour
     public void StartGame()
     {
         //Stop playing the main menu background music
-        if(GameManager.instance != null && FindObjectOfType<AudioManager>() != null)
-            FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);
+        if(FindObjectOfType<AudioManager>() != null)
+            FindObjectOfType<AudioManager>().Stop(GameData.playingSongName);
 
         //Load the necessary game scene
         SceneManager.LoadScene(levelToLoad);
+    }
+
+    public void SkipToControls()
+    {
+        //Advance to the last line in the story
+        currentLine = storyDialogLines.Length - 1;
+        storyText.text = storyDialogLines[currentLine];
+
+        //Change to last screen UI
+        AdjustStoryUIFinal();
     }
 
     public void NextPage()
@@ -46,13 +56,21 @@ public class StoryController : MonoBehaviour
         //If the next line is the end of the dialog
         if(currentLine + 1 >= storyDialogLines.Length)
         {
-            //Hide the next page button
-            storyButtons[1].gameObject.SetActive(false);
-
-            //Change the text on the skip story button and move to center
-            storyButtons[0].GetComponentInChildren<TextMeshProUGUI>().text = "Start Game";
-            storyButtons[0].GetComponent<RectTransform>().anchoredPosition = 
-                new Vector2(0, storyButtons[0].GetComponent<RectTransform>().anchoredPosition.y);
+            AdjustStoryUIFinal();
         }
+    }
+
+    private void AdjustStoryUIFinal()
+    {
+        //Hide the next page button
+        storyButtons[1].gameObject.SetActive(false);
+
+        //Change the text on the skip story button and move to center
+        storyButtons[0].GetComponentInChildren<TextMeshProUGUI>().text = "Start Game";
+        storyButtons[0].GetComponent<RectTransform>().anchoredPosition =
+            new Vector2(0, storyButtons[0].GetComponent<RectTransform>().anchoredPosition.y);
+
+        storyButtons[0].onClick.RemoveListener(SkipToControls);
+        storyButtons[0].onClick.AddListener(StartGame);
     }
 }

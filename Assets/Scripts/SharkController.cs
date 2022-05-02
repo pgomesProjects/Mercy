@@ -397,6 +397,10 @@ public class SharkController : MonoBehaviour
     {
         Vector3 teleportPos = PlayerController.main.transform.position + (PlayerController.main.transform.forward * (PlayerController.main.playerViewingDistance + sharkTeleportationBuffer));
 
+        //If the point is outside of the bounds, spawn in the opposite direction
+        if(!GetPoint.instance.PointInsideBounds(teleportPos))
+            teleportPos = PlayerController.main.transform.position + (-PlayerController.main.transform.forward * (PlayerController.main.playerViewingDistance + sharkTeleportationBuffer));
+
         //If the shark's teleport position is less than 60, spawn her high enough so she doesn't spawn below the ground or right underneath the player
         if (teleportPos.y < 55)
             teleportPos.y = 200;

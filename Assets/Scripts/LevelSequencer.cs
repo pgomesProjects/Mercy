@@ -250,13 +250,11 @@ public class LevelSequencer : MonoBehaviour
                 //Scene cleanup:
                 if (FindObjectOfType<AudioManager>() != null) //Scene has audio manager
                 {
-                    FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);     //Stop audio manager
+                    FindObjectOfType<AudioManager>().Stop(GameData.playingSongName);     //Stop audio manager
                     LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel); //Stop level music
                 }
-                if(GameManager.instance != null)
-                {
-                    GameManager.instance.finalScore = PlayerController.main.playerScore;
-                }
+
+                GameData.finalScore = PlayerController.main.playerScore;
                 Cursor.visible = true;             //Make cursor visible
                 SceneManager.LoadScene(exitScene); //Load exit scene
                 break;

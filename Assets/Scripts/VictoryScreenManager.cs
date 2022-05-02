@@ -17,8 +17,8 @@ public class VictoryScreenManager : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
         if (audioManager != null)
         {
-            GameManager.instance.playingSongName = "VictorySFX";
-            audioManager.Play(GameManager.instance.playingSongName, PlayerPrefs.GetFloat("SFXVolume"));
+            GameData.playingSongName = "VictorySFX";
+            audioManager.Play(GameData.playingSongName, PlayerPrefs.GetFloat("SFXVolume"));
         }
         ShowScore();
     }
@@ -26,10 +26,7 @@ public class VictoryScreenManager : MonoBehaviour
     {
         int finalScore = 0;
 
-        if (GameManager.instance != null)
-        {
-            finalScore = GameManager.instance.finalScore;
-        }
+        finalScore = GameData.finalScore;
 
         finalScoreText.text = "Score: <br><size='60'>" + finalScore + "</size>";
 
@@ -45,9 +42,9 @@ public class VictoryScreenManager : MonoBehaviour
     {
         if (audioManager != null)
         {
-            if (audioManager.IsPlaying(GameManager.instance.playingSongName))
+            if (audioManager.IsPlaying(GameData.playingSongName))
             {
-                audioManager.Stop(GameManager.instance.playingSongName);
+                audioManager.Stop(GameData.playingSongName);
             }
         }
         SceneManager.LoadScene(reloadLevel);

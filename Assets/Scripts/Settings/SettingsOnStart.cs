@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class SettingsOnStart : MonoBehaviour
 {
-    public SettingsController settingsController;
+    [SerializeField]
+    internal SettingsController settingsController;
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +17,7 @@ public class SettingsOnStart : MonoBehaviour
             CallSettingsValues();
 
         //Play titlescreen music
-        GameManager.instance.playingSongName = "Titlescreen";
+        GameData.playingSongName = "Titlescreen";
         FindObjectOfType<AudioManager>().Play("Titlescreen", PlayerPrefs.GetFloat("BGMVolume"));
     }
 
@@ -31,7 +32,7 @@ public class SettingsOnStart : MonoBehaviour
             PlayerPrefs.SetInt("FirstRun", 1);
         }
 
-        GameManager.instance.playingSongName = "Titlescreen";
+        GameData.playingSongName = "Titlescreen";
 
         SetUpFullscreen();
         SetUpVSync();
@@ -48,11 +49,11 @@ public class SettingsOnStart : MonoBehaviour
         settingsController.GetVolumeSliders()[0].value = PlayerPrefs.GetFloat("BGMVolume") * 10;
         settingsController.GetVolumeSliders()[1].value = PlayerPrefs.GetFloat("SFXVolume") * 10;
         settingsController.GetSensitivitySlider().value = PlayerPrefs.GetFloat("MouseSensitivity") * 100;
-        settingsController.GetFullScreenToggle().isOn = GameManager.instance.currentSettings.GetIsFullScreen();
-        settingsController.GetVSyncEnabledToggle().isOn = GameManager.instance.currentSettings.GetVSyncEnabled();
-        settingsController.GetSettingsDropdowns()[0].value = (int)GameManager.instance.currentSettings.GetCurrentResolution();
+        settingsController.GetFullScreenToggle().isOn = GameData.currentSettings.GetIsFullScreen();
+        settingsController.GetVSyncEnabledToggle().isOn = GameData.currentSettings.GetVSyncEnabled();
+        settingsController.GetSettingsDropdowns()[0].value = (int)GameData.currentSettings.GetCurrentResolution();
         settingsController.GetSettingsDropdowns()[0].RefreshShownValue();
-        settingsController.GetSettingsDropdowns()[1].value = (int)GameManager.instance.currentSettings.GetGraphicsQuality();
+        settingsController.GetSettingsDropdowns()[1].value = (int)GameData.currentSettings.GetGraphicsQuality();
         settingsController.GetSettingsDropdowns()[1].RefreshShownValue();
     }//end of CallSettingsValues
 
@@ -70,8 +71,8 @@ public class SettingsOnStart : MonoBehaviour
                 Screen.fullScreenMode = FullScreenMode.Windowed;
                 break;
         }
-        GameManager.instance.currentSettings.SetIsFullScreen(Screen.fullScreenMode == FullScreenMode.ExclusiveFullScreen);
-        if (GameManager.instance.currentSettings.GetIsFullScreen())
+        GameData.currentSettings.SetIsFullScreen(Screen.fullScreenMode == FullScreenMode.ExclusiveFullScreen);
+        if (GameData.currentSettings.GetIsFullScreen())
             settingsController.GetFullScreenToggle().isOn = true;
         else
             settingsController.GetFullScreenToggle().isOn = false;
@@ -80,8 +81,8 @@ public class SettingsOnStart : MonoBehaviour
     private void SetUpVSync()
     {
         QualitySettings.vSyncCount = PlayerPrefs.GetInt("VSyncEnabled");
-        GameManager.instance.currentSettings.SetVSyncEnabled(PlayerPrefs.GetInt("VSyncEnabled") == 1);
-        if (GameManager.instance.currentSettings.GetVSyncEnabled())
+        GameData.currentSettings.SetVSyncEnabled(PlayerPrefs.GetInt("VSyncEnabled") == 1);
+        if (GameData.currentSettings.GetVSyncEnabled())
             settingsController.GetVSyncEnabledToggle().isOn = true;
         else
             settingsController.GetVSyncEnabledToggle().isOn = false;
@@ -91,7 +92,7 @@ public class SettingsOnStart : MonoBehaviour
     {
         settingsController.GetVolumeSliders()[0].value = PlayerPrefs.GetFloat("BGMVolume") * 10;
         settingsController.GetVolumeSliders()[1].value = PlayerPrefs.GetFloat("SFXVolume") * 10;
-        FindObjectOfType<AudioManager>().ChangeVolume(GameManager.instance.playingSongName, PlayerPrefs.GetFloat("BGMVolume"));
+        FindObjectOfType<AudioManager>().ChangeVolume(GameData.playingSongName, PlayerPrefs.GetFloat("BGMVolume"));
     }//end of SetUpVolume
 
     public void SetUpSensitivity()
@@ -103,7 +104,7 @@ public class SettingsOnStart : MonoBehaviour
     {
         int currentResolutionIndex = -1;
 
-        if (GameManager.instance.currentSettings.GetIsFullScreen())
+        if (GameData.currentSettings.GetIsFullScreen())
         {
             for (int i = 0; i < settingsController.possibleResolutions.GetLength(0); i++)
             {
@@ -127,7 +128,7 @@ public class SettingsOnStart : MonoBehaviour
             currentResolutionIndex = 1;
 
         settingsController.GetSettingsDropdowns()[0].value = currentResolutionIndex;
-        GameManager.instance.currentSettings.SetCurrentResolution((GameSettings.Resolution)currentResolutionIndex);
+        GameData.currentSettings.SetCurrentResolution((GameSettings.Resolution)currentResolutionIndex);
         settingsController.GetSettingsDropdowns()[0].RefreshShownValue();
     }//end of SetUpResolution
 
@@ -135,7 +136,7 @@ public class SettingsOnStart : MonoBehaviour
     {
         int currentQuality = QualitySettings.GetQualityLevel();
         settingsController.GetSettingsDropdowns()[1].value = currentQuality;
-        GameManager.instance.currentSettings.SetGraphicsQuality((GameSettings.GraphicsQuality)currentQuality);
+        GameData.currentSettings.SetGraphicsQuality((GameSettings.GraphicsQuality)currentQuality);
         settingsController.GetSettingsDropdowns()[1].RefreshShownValue();
     }//end of SetUpQuality
 

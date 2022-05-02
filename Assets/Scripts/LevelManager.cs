@@ -31,8 +31,8 @@ public class LevelManager : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
         if(audioManager != null)
         {
-            GameManager.instance.playingSongName = "InGame";
-            FindObjectOfType<AudioManager>().Play(GameManager.instance.playingSongName, PlayerPrefs.GetFloat("BGMVolume"));
+            GameData.playingSongName = "InGame";
+            FindObjectOfType<AudioManager>().Play(GameData.playingSongName, PlayerPrefs.GetFloat("BGMVolume"));
         }
 
         personalBestText.text = "Personal Best: " + PlayerPrefs.GetInt("HighScore");
@@ -94,7 +94,7 @@ public class LevelManager : MonoBehaviour
         isGameOver = true;
         if (audioManager != null)
         {
-            FindObjectOfType<AudioManager>().Stop(GameManager.instance.playingSongName);
+            FindObjectOfType<AudioManager>().Stop(GameData.playingSongName);
             FindObjectOfType<AudioManager>().Play("GameOverSFX", PlayerPrefs.GetFloat("SFXVolume"));
         }
         SceneManager.LoadScene("GameOver");

@@ -202,7 +202,8 @@ MonoBehaviour:
   lookDamping: 0.2
   verticalLookLimits: {x: -75, y: 74}
   pickupTime: 1.5
-  oxygenDepletionRate: 0
+  defaultOxygenDepletionRate: 2
+  dashOxygenDepletionRate: 0.3
   playerScore: 0
   interestedAreaBox: {x: 200, y: 15, z: 200}
   playerViewingDistance: 370

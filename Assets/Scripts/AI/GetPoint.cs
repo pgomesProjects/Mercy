@@ -22,9 +22,41 @@ public class GetPoint : MonoBehaviour
 
     public Vector3 SpawnNodePoint()
     {
-        Vector3 pos = center + new Vector3(Random.Range(-size.x / 2, size.x / 2), Random.Range(-size.y / 2, size.y / 2), Random.Range(-size.z / 2, size.z / 2));
-        Instantiate(nodeObject, pos, nodeObject.transform.rotation);
-        return pos;
+        for(int i = 0; i < 30; i++)
+        {
+            Vector3 pos = center + new Vector3(Random.Range(-size.x / 2, size.x / 2), Random.Range(-size.y / 2, size.y / 2), Random.Range(-size.z / 2, size.z / 2));
+
+            //If the node is not colliding with anything and is not under the map, spawn the node
+            if (!Physics.CheckSphere(pos, 10) && pos.y > 10)
+            {
+                Instantiate(nodeObject, pos, nodeObject.transform.rotation);
+                return pos;
+            }
+            //If they are, try again
+            else
+            {
+                continue;
+            }
+        }
+
+        return Vector3.zero;
+    }
+
+    public bool PointInsideBounds(Vector3 currentPoint)
+    {
+        //Check x
+        if (currentPoint.x < -size.x / 2 || currentPoint.x > size.x / 2)
+            return false;
+
+        //Check y
+        if (currentPoint.y < -size.y / 2 || currentPoint.y > size.y / 2)
+            return false;
+
+        //Check z
+        if (currentPoint.z < -size.z / 2 || currentPoint.z > size.z / 2)
+            return false;
+
+        return true;
     }
 
     public Vector3 SpawnPointCloseToPlayer()
@@ -36,9 +68,24 @@ public class GetPoint : MonoBehaviour
         else
             minimumY = -PlayerController.main.interestedAreaBox.y;
 
-        Vector3 pos = PlayerController.main.transform.position + new Vector3(Random.Range(-PlayerController.main.interestedAreaBox.x / 2, PlayerController.main.interestedAreaBox.x / 2), Random.Range(minimumY, PlayerController.main.interestedAreaBox.y / 2), Random.Range(-PlayerController.main.interestedAreaBox.z / 2, PlayerController.main.interestedAreaBox.z / 2 / 2));
-        Instantiate(nodeObject, pos, nodeObject.transform.rotation);
-        return pos;
+        for (int i = 0; i < 30; i++)
+        {
+            Vector3 pos = PlayerController.main.transform.position + new Vector3(Random.Range(-PlayerController.main.interestedAreaBox.x / 2, PlayerController.main.interestedAreaBox.x / 2), Random.Range(minimumY, PlayerController.main.interestedAreaBox.y / 2), Random.Range(-PlayerController.main.interestedAreaBox.z / 2, PlayerController.main.interestedAreaBox.z / 2 / 2));
+
+            //If the node is not colliding with anything and is not under the map, spawn the node
+            if (!Physics.CheckSphere(pos, 10) && pos.y > 10)
+            {
+                Instantiate(nodeObject, pos, nodeObject.transform.rotation);
+                return pos;
+            }
+            //If they are, try again
+            else
+            {
+                continue;
+            }
+        }
+
+        return Vector3.zero;
     }
 
     public Vector3 SpawnNodeAtPlayer()

@@ -35,9 +35,9 @@ public class SettingsController : MonoBehaviour
     public void FullScreenToggle(bool isFullScreen)
     {
         //Toggle fullscreen variable
-        GameManager.instance.currentSettings.SetIsFullScreen(isFullScreen);
+        GameData.currentSettings.SetIsFullScreen(isFullScreen);
 
-        if (GameManager.instance.currentSettings.GetIsFullScreen())
+        if (GameData.currentSettings.GetIsFullScreen())
         {
             Debug.Log("Game Is Fullscreen");
             PlayerPrefs.SetInt("IsWindowed", 0);
@@ -54,9 +54,9 @@ public class SettingsController : MonoBehaviour
     public void VSyncEnabledToggle(bool isVSyncEnabled)
     {
         //Toggle vsync variable
-        GameManager.instance.currentSettings.SetVSyncEnabled(isVSyncEnabled);
+        GameData.currentSettings.SetVSyncEnabled(isVSyncEnabled);
 
-        if (GameManager.instance.currentSettings.GetVSyncEnabled())
+        if (GameData.currentSettings.GetVSyncEnabled())
         {
             Debug.Log("VSync Enabled");
             PlayerPrefs.SetInt("VSyncEnabled", 1);
@@ -72,18 +72,18 @@ public class SettingsController : MonoBehaviour
 
     public void ResolutionDropdownChange(int resIndex)
     {
-        GameManager.instance.currentSettings.SetCurrentResolution((GameSettings.Resolution)resIndex);
-        Screen.SetResolution(possibleResolutions[(int)GameManager.instance.currentSettings.GetCurrentResolution(), 0],
-            possibleResolutions[(int)GameManager.instance.currentSettings.GetCurrentResolution(), 1], Screen.fullScreenMode);
+        GameData.currentSettings.SetCurrentResolution((GameSettings.Resolution)resIndex);
+        Screen.SetResolution(possibleResolutions[(int)GameData.currentSettings.GetCurrentResolution(), 0],
+            possibleResolutions[(int)GameData.currentSettings.GetCurrentResolution(), 1], Screen.fullScreenMode);
 
-        Debug.Log(GameManager.instance.currentSettings.GetCurrentResolution());
+        Debug.Log(GameData.currentSettings.GetCurrentResolution());
     }//end of ResolutionDropdownChange
 
     public void QualityDropdownChange(int qualityIndex)
     {
-        GameManager.instance.currentSettings.SetGraphicsQuality((GameSettings.GraphicsQuality)qualityIndex);
-        QualitySettings.SetQualityLevel((int)GameManager.instance.currentSettings.GetGraphicsQuality());
-        Debug.Log(GameManager.instance.currentSettings.GetGraphicsQuality());
+        GameData.currentSettings.SetGraphicsQuality((GameSettings.GraphicsQuality)qualityIndex);
+        QualitySettings.SetQualityLevel((int)GameData.currentSettings.GetGraphicsQuality());
+        Debug.Log(GameData.currentSettings.GetGraphicsQuality());
     }//end of QualityDropdownChange
 
     public Slider[] GetVolumeSliders() { return volumeSliders; }
