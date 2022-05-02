@@ -134,9 +134,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCam: {fileID: 1130405230100577287}
   pickupProgressIndicator: {fileID: 0}
-  baseSwimSpeed: 60
-  ascendSpeed: 25
-  descendSpeed: 30
+  baseSwimSpeed: 70
+  ascendSpeed: 30
+  descendSpeed: 35
   swimAccel: 0.186
   dashForce: 200
   dashPeriod: 0.75
@@ -202,6 +202,7 @@ MonoBehaviour:
   lookDamping: 0.2
   verticalLookLimits: {x: -75, y: 74}
   pickupTime: 1.5
+  oxygenDepletionRate: 0
   playerScore: 0
   interestedAreaBox: {x: 200, y: 15, z: 200}
   playerViewingDistance: 370
@@ -350,6 +351,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 08e020a6-70b4-45df-bad6-2d3d0e4f2f0f
     m_ActionName: Player/PickUp[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c5876357-3931-4269-9533-a4fbf16577ea
+    m_ActionName: Player/Pause[/Keyboard/escape,/Keyboard/p]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

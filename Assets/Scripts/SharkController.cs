@@ -442,7 +442,7 @@ public class SharkController : MonoBehaviour
     {
         //If the player is currently in the shark's body sensor, start raising an alarm
         Collider[] hitColliders = Physics.OverlapSphere(transform.position + transform.forward * (sharkWidth / 2), attackRadius, LayerMask.GetMask("Player"));
-        if (hitColliders.Length != 0)
+        if (hitColliders.Length != 0 && !CageController.main.playerInside)
         {
             Debug.Log("Player Has Been Attacked! Game Over!");
 

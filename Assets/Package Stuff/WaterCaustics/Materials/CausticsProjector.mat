@@ -78,11 +78,11 @@ Material:
     - _Distortion: 6
     - _DistortionSpeed: 0.2
     - _DstBlend: 0
-    - _EdgeBlend: 4.3
+    - _EdgeBlend: 100
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Height: 40.5
+    - _Height: 20.7
     - _LOD: 100
     - _Metallic: 0
     - _Mode: 0
