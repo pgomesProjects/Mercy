@@ -13,7 +13,7 @@ public class PickupController : MonoBehaviour
     private Light selectionLight;
     private PlayerActionsMap playerActions;
     private Material origMat;
-
+    internal PickupSpawner spawner; //This pickup's spawner (if it was spawned, may be null)
     private void Awake()
     {
         playerActions = new PlayerActionsMap();
@@ -74,6 +74,8 @@ public class PickupController : MonoBehaviour
             LevelManager.main.UpdateScore(PlayerController.main.playerScore);
             SharkController.main.UpdateAggression();
             PlayerController.pickupsInRange.Remove(this);
+            PickupSpawner.SpawnPickup();
+            spawner?.spawnedPickups.Remove(gameObject);
             Destroy(gameObject);
         }
     }
