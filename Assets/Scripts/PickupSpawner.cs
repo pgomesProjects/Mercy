@@ -34,6 +34,10 @@ public class PickupSpawner : MonoBehaviour
     {
         for (int i = 0; i < spawnOnStart; i++) LocalSpawnPickup();
     }
+    private void OnDestroy()
+    {
+        spawners.Clear();
+    }
 
     //STATIC METHODS:
     /// <summary>
