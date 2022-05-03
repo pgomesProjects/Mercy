@@ -1572,7 +1572,7 @@ PrefabInstance:
       objectReference: {fileID: 1773725932}
     - target: {fileID: 2426527194120171513, guid: 93beb4b3688ce9240b4d6a270b08dfd9, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2426527194120171513, guid: 93beb4b3688ce9240b4d6a270b08dfd9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7077,7 +7077,7 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: -99.045, z: 0}
 --- !u!225 &1289461284 stripped
 CanvasGroup:
@@ -7444,7 +7444,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678111, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2061423005058678111, guid: afa57a2776f46c244a348cd5edb72071, type: 3}
       propertyPath: m_LocalScale.x
@@ -7603,7 +7603,7 @@ Transform:
   - {fileID: 2076414318}
   - {fileID: 1959217565}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1612798271
 PrefabInstance:
