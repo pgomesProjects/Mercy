@@ -275,7 +275,7 @@ public class SharkController : MonoBehaviour
         //Generate random nodes while the player is not currently detected
         if (!nodeGenerated)
         {
-            targetPos = GetPoint.instance.SpawnPointCloseToPlayer();
+            targetPos = GetPoint.instance.SpawnPointCloseToPlayer(1);
             nodeGenerated = true;
         }
     }
@@ -411,11 +411,15 @@ public class SharkController : MonoBehaviour
 
         Quaternion sharkRotation = PlayerController.main.transform.rotation;
 
-        //Two-thirds chance of the shark being turned perpendicular the player
-        if (randomFloat > 0.333f)
+        //One-thirds chance of the shark being turned perpendicular the player
+        if (randomFloat < 0.333f)
         {
             sharkRotation.y = sharkRotation.y + 90;
         }
+
+        //Destroy any existing nodes and spawn a new one near the player
+        DestroyAllNodes();
+        targetPos = GetPoint.instance.SpawnPointCloseToPlayer(PlayerController.main.teleportAreaMultiplier);
 
         transform.rotation = sharkRotation;
     }

@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
     private float currentDepletionRate;
 
     public Vector3 interestedAreaBox = new Vector3(200, 200, 200); //The area in which the shark goes to when interested
+    public float teleportAreaMultiplier = 1.25f; //A multiplier that creates a new box for the shark to spawn a little bit farther from the player
     internal Vector3 originalInterestedAreaBox;
     public float playerViewingDistance = 100;
 
@@ -176,6 +177,10 @@ public class PlayerController : MonoBehaviour
         else
         {
             Debug.Log("Player Is Out Of Oxygen!");
+            //Stop the current threat music
+            Cursor.visible = true;
+            LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel);
+            LevelManager.main.GameOver();
         }
     }
 

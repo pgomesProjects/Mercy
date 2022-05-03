@@ -75,6 +75,8 @@ public class LevelSequencer : MonoBehaviour
         cageTargPos = cageDescendTarget.transform.position;   //Get starting target for dive cage
 
         //Entry sequence prep:
+        if (FindObjectOfType<AudioManager>() != null)
+            FindObjectOfType<AudioManager>().Play("CageChain", PlayerPrefs.GetFloat("SFXVolume", 0.5f));
         StartCoroutine(FadePlayerInOut(entryFadeTime, true)); //Begin fading in player senses
         SharkController.main.canMove = false;                 //Make sure the shark can't move
         Cursor.visible = false;                               //Make cursor invisible
@@ -225,7 +227,10 @@ public class LevelSequencer : MonoBehaviour
                 CageController.main.transform.position = cageDescendTarget.position; //Make sure cage is at entry position
                 CageController.main.ReleasePlayer();                                 //Release player from dive cage
                 CageController.main.GetComponent<FloatBob>().Initialize(true);       //Re-initialize and enable cage bob
+                                                                                     
                 //Update sequencer:
+                if (FindObjectOfType<AudioManager>() != null)
+                    FindObjectOfType<AudioManager>().Stop("CageChain");              //Stop cage chain sound effect
                 PlayerController.main.oxygenIsDepleting = true;                      //Start depleting the player's oxygen
                 LevelManager.main.StartThreatMusic(1);                               //Start the threat music
                 StartCoroutine(FadeIndicatorInOut(0.25f, false));                    //Fade in the player HUD

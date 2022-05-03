@@ -20,6 +20,7 @@ public class PickupSpawner : MonoBehaviour
     //Settings:
     [SerializeField, Tooltip("Radius of pickup spawn area")]                             private float spawnRadius;
     [SerializeField, Tooltip("Maximum number of pickups allowed to spawn in this area")] private int maxPickups;
+    [SerializeField, Tooltip("Objects to spawn on start of game")]                       private int spawnOnStart;
 
     //Runtime vars:
 
@@ -28,6 +29,10 @@ public class PickupSpawner : MonoBehaviour
     {
         //Initialize:
         spawners.Add(this); //Add this spawners to list of active spawners in scene
+    }
+    private void Start()
+    {
+        for (int i = 0; i < spawnOnStart; i++) LocalSpawnPickup();
     }
 
     //STATIC METHODS:
@@ -63,20 +68,24 @@ public class PickupSpawner : MonoBehaviour
         if (validSpawners.Count == 0) return; //Do not attempt to spawn a pickup if there are no valid spawners
 
         //Spawn pickup:
-        PickupSpawner activeSpawner = validSpawners[Random.Range(0, validSpawners.Count)]; //Pick active spawner from list of random spawners
-        Vector2 relSpawnPoint = Random.insideUnitCircle * activeSpawner.spawnRadius;       //Pick spawn point inside spawner's radius
-        Vector3 worldSpawnPoint = new Vector3(relSpawnPoint.x, 0, relSpawnPoint.y);        //Construct Vector3 version of spawnpoint
-        worldSpawnPoint += activeSpawner.transform.position;                               //Move spawnpoint to spawner position
+        validSpawners[Random.Range(0, validSpawners.Count)].LocalSpawnPickup(); //Pick active spawner from list of random spawners
+        
+    }
+    public void LocalSpawnPickup()
+    {
+        Vector2 relSpawnPoint = Random.insideUnitCircle * spawnRadius;              //Pick spawn point inside spawner's radius
+        Vector3 worldSpawnPoint = new Vector3(relSpawnPoint.x, 0, relSpawnPoint.y); //Construct Vector3 version of spawnpoint
+        worldSpawnPoint += transform.position;                                      //Move spawnpoint to spawner position
 
         Ray spawnRay = new Ray(worldSpawnPoint, Vector3.down);  //Create ray which points down from found spawn point
         Physics.Raycast(spawnRay, out RaycastHit spawnSurface); //Raycast to find point in terrain at spawnpoint
         worldSpawnPoint = spawnSurface.point;                   //Get actual world spawn point based on raycast
 
-        GameObject pickup = Instantiate(activeSpawner.pickupPrefabs[Random.Range(0, activeSpawner.pickupPrefabs.Count)]); //Spawn pickup
-        activeSpawner.spawnedPickups.Add(pickup);                                                                         //Add pickup to spawner list
-        pickup.GetComponent<PickupController>().spawner = activeSpawner;                                                  //Give pickup a reference to its spawner
-        pickup.transform.parent = activeSpawner.transform;                                                                //Child pickup to spawner
-        pickup.transform.position = worldSpawnPoint;                                                                      //Place pickup at spawn point
+        GameObject pickup = Instantiate(pickupPrefabs[Random.Range(0, pickupPrefabs.Count)]); //Spawn pickup
+        spawnedPickups.Add(pickup);                                                           //Add pickup to spawner list
+        pickup.GetComponent<PickupController>().spawner = this;                               //Give pickup a reference to its spawner
+        pickup.transform.parent = transform;                                                  //Child pickup to spawner
+        pickup.transform.position = worldSpawnPoint;                                          //Place pickup at spawn point
         print("Pickup spawned");
     }
 }

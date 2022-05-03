@@ -10,7 +10,6 @@ public class PickupController : MonoBehaviour
 
     private MeshRenderer rnd;
     internal bool canBeCollected;
-    private Light selectionLight;
     private PlayerActionsMap playerActions;
     private Material origMat;
     internal PickupSpawner spawner; //This pickup's spawner (if it was spawned, may be null)
@@ -24,7 +23,6 @@ public class PickupController : MonoBehaviour
     void Start()
     {
         canBeCollected = false;
-        selectionLight = transform.Find("SelectionLight").GetComponent<Light>();
         rnd = GetComponent<MeshRenderer>();
         origMat = rnd.material;
     }

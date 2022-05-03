@@ -59,7 +59,7 @@ public class GetPoint : MonoBehaviour
         return true;
     }
 
-    public Vector3 SpawnPointCloseToPlayer()
+    public Vector3 SpawnPointCloseToPlayer(float multiplier)
     {
         //Keep the y in bounds
         float minimumY = 0;
@@ -70,7 +70,7 @@ public class GetPoint : MonoBehaviour
 
         for (int i = 0; i < 30; i++)
         {
-            Vector3 pos = PlayerController.main.transform.position + new Vector3(Random.Range(-PlayerController.main.interestedAreaBox.x / 2, PlayerController.main.interestedAreaBox.x / 2), Random.Range(minimumY, PlayerController.main.interestedAreaBox.y / 2), Random.Range(-PlayerController.main.interestedAreaBox.z / 2, PlayerController.main.interestedAreaBox.z / 2 / 2));
+            Vector3 pos = PlayerController.main.transform.position + new Vector3(Random.Range(-PlayerController.main.interestedAreaBox.x / 2 * multiplier, PlayerController.main.interestedAreaBox.x / 2) * multiplier, Random.Range(minimumY, PlayerController.main.interestedAreaBox.y / 2), Random.Range(-PlayerController.main.interestedAreaBox.z / 2 * multiplier, PlayerController.main.interestedAreaBox.z / 2 * multiplier));
 
             //If the node is not colliding with anything and is not under the map, spawn the node
             if (!Physics.CheckSphere(pos, 10) && pos.y > 10)
