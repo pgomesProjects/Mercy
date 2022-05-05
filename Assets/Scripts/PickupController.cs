@@ -72,7 +72,7 @@ public class PickupController : MonoBehaviour
             LevelManager.main.UpdateScore(PlayerController.main.playerScore);
             SharkController.main.UpdateAggression();
             PlayerController.pickupsInRange.Remove(this);
-            //PickupSpawner.SpawnPickup();
+            PickupSpawner.SpawnPickup();
             if (spawner != null) spawner.spawnedPickups.Remove(gameObject);
             Destroy(gameObject);
         }
