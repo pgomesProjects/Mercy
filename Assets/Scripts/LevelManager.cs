@@ -76,6 +76,10 @@ public class LevelManager : MonoBehaviour
                 else
                 {
                     FindObjectOfType<AudioManager>().Play("Heartbeat" + level, PlayerPrefs.GetFloat("SFXVolume"));
+                    
+                    //If threatened, also play the threatened sting
+                    if(level == (int)SharkController.ThreatLevel.THREATENED)
+                        FindObjectOfType<AudioManager>().Play("ThreatenedSting", PlayerPrefs.GetFloat("SFXVolume"));
                 }
             }
         }

@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
     public int playerScore; //Score that depends on the items the player picks up
     private bool pickingUpItem = false;  //Whether or not player is currently picking up an item
     private float timeHoldingPickup = 0; //Time player has spent holding pickup button when in range of pickup
-    internal float oxygenPercentage = 10; //Player oxygen level
+    internal float oxygenPercentage = 100; //Player oxygen level
     internal bool oxygenIsDepleting;
     private float currentDepletionRate;
     internal bool playerDyingFromOxygen;

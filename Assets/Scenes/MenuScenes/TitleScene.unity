@@ -3025,6 +3025,11 @@ MonoBehaviour:
     pitch: 1
     loop: 1
     source: {fileID: 0}
+  - name: ThreatenedSting
+    clip: {fileID: 8300000, guid: bb4c1f4b2bc9e724687d4fdd6ab04920, type: 3}
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
   - name: Heartbeat4
     clip: {fileID: 8300000, guid: db29d52522d457a409da1e2f687a619d, type: 3}
     pitch: 1
