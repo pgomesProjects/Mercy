@@ -44,9 +44,14 @@ public class PauseController : MonoBehaviour
             Time.timeScale = 0;
             if(FindObjectOfType<AudioManager>() != null)
             {
-                if(FindObjectOfType<AudioManager>().IsPlaying("CageChain"))
+/*                if(FindObjectOfType<AudioManager>().IsPlaying("CageChain"))
                     FindObjectOfType<AudioManager>().Pause("CageChain");
-                FindObjectOfType<AudioManager>().Pause(GameData.playingSongName);
+                FindObjectOfType<AudioManager>().Pause(GameData.playingSongName);*/
+
+                if(FindObjectOfType<AudioManager>() != null)
+                {
+                    FindObjectOfType<AudioManager>().PauseAllSounds();
+                }
                 LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel);
             }
         }
@@ -56,8 +61,13 @@ public class PauseController : MonoBehaviour
             Time.timeScale = 1;
             if (FindObjectOfType<AudioManager>() != null)
             {
-                FindObjectOfType<AudioManager>().Resume("CageChain");
-                FindObjectOfType<AudioManager>().Resume(GameData.playingSongName);
+                /*                FindObjectOfType<AudioManager>().Resume("CageChain");
+                                FindObjectOfType<AudioManager>().Resume(GameData.playingSongName);*/
+
+                if (FindObjectOfType<AudioManager>() != null)
+                {
+                    FindObjectOfType<AudioManager>().ResumeAllSounds();
+                }
                 LevelManager.main.StartThreatMusic((int)SharkController.main.currentThreatLevel);
             }
         }

@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Tooltip("How long player takes to pick up an item")] private float pickupTime;
     [SerializeField] [Tooltip("How long player takes to lose one percent of oxygen per second normally")] private float defaultOxygenDepletionRate;
     [SerializeField] [Tooltip("How long player takes to lose one percent of oxygen per second when dashing")] private float dashOxygenDepletionRate;
+    [SerializeField] [Tooltip("How long player takes to die after losing oxygen")] private float secondsUntilOxygenDeath;
 
     //Runtime Memory Vars:
     private Vector2 mouseRotation; //Cumulative angular rotation generated from mouse movements
@@ -58,14 +59,17 @@ public class PlayerController : MonoBehaviour
     public int playerScore; //Score that depends on the items the player picks up
     private bool pickingUpItem = false;  //Whether or not player is currently picking up an item
     private float timeHoldingPickup = 0; //Time player has spent holding pickup button when in range of pickup
-    internal float oxygenPercentage = 100; //Player oxygen level
+    internal float oxygenPercentage = 10; //Player oxygen level
     internal bool oxygenIsDepleting;
     private float currentDepletionRate;
+    internal bool playerDyingFromOxygen;
+    private IEnumerator playerOxygenBlackoutCoroutine;
 
     public Vector3 interestedAreaBox = new Vector3(200, 200, 200); //The area in which the shark goes to when interested
     public float teleportAreaMultiplier = 1.25f; //A multiplier that creates a new box for the shark to spawn a little bit farther from the player
     internal Vector3 originalInterestedAreaBox;
     public float playerViewingDistance = 100;
+
 
     //RUNTIME METHODS:
     private void Awake()
@@ -174,14 +178,52 @@ public class PlayerController : MonoBehaviour
             LevelManager.main.UpdateOxygenBar(oxygenPercentage);
         }
         //The player is out of oxygen
-        else
+        else if(!playerDyingFromOxygen)
         {
             Debug.Log("Player Is Out Of Oxygen!");
-            //Stop the current threat music
-            Cursor.visible = true;
-            LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel);
-            LevelManager.main.GameOver();
+            StartOxygenDeath();
+            playerDyingFromOxygen = true;
         }
+    }
+
+    private void StartOxygenDeath()
+    {        
+        //Wait for the sequence to finish before game over
+        StartCoroutine(WaitForGameOver());
+    }
+
+    public void StopOxygenDeath()
+    {
+        //Stop the choking SFX
+        if (FindObjectOfType<AudioManager>() != null)
+            FindObjectOfType<AudioManager>().Stop("OxygenChokingSFX");
+
+        //Stop the blackout animation coroutine
+        StopCoroutine(playerOxygenBlackoutCoroutine);
+
+        //Quickly get rid of the blackout screen
+        StartCoroutine(LevelSequencer.main.FadePlayerInOut(0.25f, true));
+    }
+
+    private IEnumerator WaitForGameOver()
+    {
+        //Play choking sound effect
+        if (FindObjectOfType<AudioManager>() != null)
+            FindObjectOfType<AudioManager>().Play("OxygenChokingSFX", PlayerPrefs.GetFloat("SFXVolume", 0.5f));
+
+        //Slowly fade in the blackout screen
+        playerOxygenBlackoutCoroutine = LevelSequencer.main.FadePlayerInOut(secondsUntilOxygenDeath, false);
+        StartCoroutine(playerOxygenBlackoutCoroutine);
+
+        //Wait for the death animation to stop before killing the player
+        yield return new WaitForSeconds(secondsUntilOxygenDeath);
+
+        //Stop the current threat music
+        Cursor.visible = true;
+        LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel);
+        if (FindObjectOfType<AudioManager>() != null)
+            FindObjectOfType<AudioManager>().Stop("OxygenChokingSFX");
+        LevelManager.main.GameOver();
     }
 
     //INPUT METHODS:

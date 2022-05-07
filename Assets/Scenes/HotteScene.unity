@@ -3805,6 +3805,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1130405230560150884, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
+      propertyPath: data.worldWaypoints
+      value: 
+      objectReference: {fileID: 1023005013}
     - target: {fileID: 1130405230645989013, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
       propertyPath: m_Name
       value: Player
@@ -3883,26 +3887,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
---- !u!1 &1130405230560150883 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1130405230100577280, guid: c4d204a2cb972a64ea436665d8445d16, type: 3}
-  m_PrefabInstance: {fileID: 1130405230560150882}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1130405230560150884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1130405230560150883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c11f2900397be0644936aac08fc82c08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data:
-    worldWaypoints: {fileID: 1023005013}
-    waypoints: []
 --- !u!1001 &3845428980007994655
 PrefabInstance:
   m_ObjectHideFlags: 0

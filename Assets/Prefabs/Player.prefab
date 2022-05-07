@@ -5025,8 +5025,10 @@ MonoBehaviour:
   pickupTime: 1.5
   defaultOxygenDepletionRate: 2
   dashOxygenDepletionRate: 0.3
+  secondsUntilOxygenDeath: 10
   playerScore: 0
   interestedAreaBox: {x: 200, y: 15, z: 200}
+  teleportAreaMultiplier: 1.25
   playerViewingDistance: 370
 --- !u!114 &1130405230645989019
 MonoBehaviour:

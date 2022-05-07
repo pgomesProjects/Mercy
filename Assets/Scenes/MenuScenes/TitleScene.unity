@@ -3070,6 +3070,11 @@ MonoBehaviour:
     pitch: 1
     loop: 1
     source: {fileID: 0}
+  - name: OxygenChokingSFX
+    clip: {fileID: 8300000, guid: 8cf0f8bab25357b4d9a4b7bd8093193c, type: 3}
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!1 &1044891802
 GameObject:
   m_ObjectHideFlags: 0

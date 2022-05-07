@@ -155,7 +155,7 @@ public class LevelSequencer : MonoBehaviour
     /// <param name="fadeTime">How long fade will take (in seconds)</param>
     /// <param name="fadeType">Whether to fade in (TRUE) or out (FALSE)</param>
     /// <returns></returns>
-    IEnumerator FadePlayerInOut(float fadeTime, bool fadeType)
+    internal IEnumerator FadePlayerInOut(float fadeTime, bool fadeType)
     {
         //Initialize:
         Color newColor = blackoutScreen.color; //Get color from blackout screen
@@ -250,6 +250,10 @@ public class LevelSequencer : MonoBehaviour
                 cageTargPos = CageController.main.transform.position; //Get current position of cage to lerp from
                 CageController.main.HideIndicator();                  //Remove the exit indicator
                 StartCoroutine(FadeIndicatorInOut(0.25f, true));     //Remove the HUD indicators
+
+                //Stop the player from oxygen death
+                if (PlayerController.main.playerDyingFromOxygen)
+                    PlayerController.main.StopOxygenDeath();
                 break;
             case LevelPhase.Exit: //Transition from Exit to next scene
                 //Scene cleanup:
