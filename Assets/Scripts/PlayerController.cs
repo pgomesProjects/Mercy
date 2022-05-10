@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     internal Rigidbody rb;                 //Player rigidbody component
     public Camera playerCam;               //Player camera component
     public Slider pickupProgressIndicator; //Player UI element which displays pickup progress
+    [Range(0, 1)] public float maxScoreMoveDebuff;
 
     public static List<PickupController> pickupsInRange = new List<PickupController>(); //Pickups currently in range of player
 
@@ -229,6 +230,10 @@ public class PlayerController : MonoBehaviour
     //INPUT METHODS:
     public void OnMove(InputAction.CallbackContext context)
     {
+        float weightHandicap = 1;
+        if (PlayerPrefs.GetInt("HighScore") > 0) weightHandicap =  Mathf.Lerp(1, maxScoreMoveDebuff, Mathf.Min(playerScore / PlayerPrefs.GetInt("HighScore"), 1));
+        print(weightHandicap);
+
         //Process input vector:
         Vector2 moveInput = context.ReadValue<Vector2>();                 //Get raw input vector
         float swimAngle = Vector2.Angle(Vector2.up, moveInput) / 180;     //Get float representing degrees off from forward move input is (as interpolant between 0-1)

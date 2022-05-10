@@ -4955,6 +4955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCam: {fileID: 1130405230100577287}
   pickupProgressIndicator: {fileID: 0}
+  maxScoreMoveDebuff: 0.9
   baseSwimSpeed: 70
   ascendSpeed: 30
   descendSpeed: 35

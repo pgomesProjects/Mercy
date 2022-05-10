@@ -3096,6 +3096,55 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a7abe36f014fc3b41b7920f3d8531cc1, type: 3}
   m_PrefabInstance: {fileID: 153348836}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &154290269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 154290270}
+  - component: {fileID: 154290271}
+  m_Layer: 0
+  m_Name: Spawner_JaquePot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &154290270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154290269}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 379.7, y: 80.5, z: -927.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1089290104}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &154290271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154290269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583c3eb2dfb62ca4cbcada9127d91bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupPrefabs:
+  - {fileID: 4579887664858108787, guid: 6eaaee80aa05ea54e99d12331640dd02, type: 3}
+  - {fileID: 2583649059089273021, guid: 493c8de5bb74d6842a33fe6a79cd5fcd, type: 3}
+  spawnRadius: 65.61
+  maxPickups: 0
+  spawnOnStart: 20
 --- !u!1 &154851189
 GameObject:
   m_ObjectHideFlags: 0
@@ -23753,6 +23802,10 @@ Transform:
   - {fileID: 1988474059}
   - {fileID: 285144922}
   - {fileID: 1860229207}
+  - {fileID: 1389583236}
+  - {fileID: 2041768277}
+  - {fileID: 1840530349}
+  - {fileID: 154290270}
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -31163,6 +31216,58 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1389365993}
   m_Mesh: {fileID: -1942779785692849965, guid: 8917e73c82865bd4db45263a78b4c010, type: 3}
+--- !u!1 &1389583235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1389583236}
+  - component: {fileID: 1389583237}
+  m_Layer: 0
+  m_Name: Spawner_TheGreatKelpfield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1389583236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389583235}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 543.5, y: 116, z: 18.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1089290104}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1389583237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389583235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583c3eb2dfb62ca4cbcada9127d91bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupPrefabs:
+  - {fileID: 2406893527616696732, guid: 1bc407f3b0c365f4d882873f4a6905f6, type: 3}
+  - {fileID: 3659082481605950216, guid: 1ec6252b3bd98b54ba15d157d1350fb8, type: 3}
+  - {fileID: 6381458262708321296, guid: 0e1910398c15b444ab86066a9c602bad, type: 3}
+  - {fileID: 7190965479876101477, guid: 70c05fca0a5421744ac0a713da6da10d, type: 3}
+  - {fileID: 2010436921889223603, guid: 07cb00a0a9e56df4081408ea84a800fa, type: 3}
+  spawnRadius: 340
+  maxPickups: 25
+  spawnOnStart: 25
 --- !u!1001 &1390764743
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40893,6 +40998,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1840530348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1840530349}
+  - component: {fileID: 1840530350}
+  m_Layer: 0
+  m_Name: Spawner_Midkelp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1840530349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840530348}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -72.7, y: 116, z: 309.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1089290104}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1840530350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840530348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583c3eb2dfb62ca4cbcada9127d91bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupPrefabs:
+  - {fileID: 2406893527616696732, guid: 1bc407f3b0c365f4d882873f4a6905f6, type: 3}
+  - {fileID: 3659082481605950216, guid: 1ec6252b3bd98b54ba15d157d1350fb8, type: 3}
+  - {fileID: 6381458262708321296, guid: 0e1910398c15b444ab86066a9c602bad, type: 3}
+  - {fileID: 7190965479876101477, guid: 70c05fca0a5421744ac0a713da6da10d, type: 3}
+  - {fileID: 2010436921889223603, guid: 07cb00a0a9e56df4081408ea84a800fa, type: 3}
+  spawnRadius: 132.1
+  maxPickups: 10
+  spawnOnStart: 10
 --- !u!1 &1842194430
 GameObject:
   m_ObjectHideFlags: 0
@@ -41748,7 +41905,7 @@ GameObject:
   - component: {fileID: 1860229207}
   - component: {fileID: 1860229208}
   m_Layer: 0
-  m_Name: Spawner_WhaleHead
+  m_Name: Spawner_WhaleHeadAbove
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46063,6 +46220,58 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2038966423}
   m_Mesh: {fileID: -1942779785692849965, guid: 8917e73c82865bd4db45263a78b4c010, type: 3}
+--- !u!1 &2041768276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2041768277}
+  - component: {fileID: 2041768278}
+  m_Layer: 0
+  m_Name: Spawner_EasternKelpfield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2041768277
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041768276}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -459, y: 116, z: 214}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1089290104}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2041768278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041768276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583c3eb2dfb62ca4cbcada9127d91bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupPrefabs:
+  - {fileID: 2406893527616696732, guid: 1bc407f3b0c365f4d882873f4a6905f6, type: 3}
+  - {fileID: 3659082481605950216, guid: 1ec6252b3bd98b54ba15d157d1350fb8, type: 3}
+  - {fileID: 6381458262708321296, guid: 0e1910398c15b444ab86066a9c602bad, type: 3}
+  - {fileID: 7190965479876101477, guid: 70c05fca0a5421744ac0a713da6da10d, type: 3}
+  - {fileID: 2010436921889223603, guid: 07cb00a0a9e56df4081408ea84a800fa, type: 3}
+  spawnRadius: 255.6
+  maxPickups: 20
+  spawnOnStart: 20
 --- !u!1001 &2042808484
 PrefabInstance:
   m_ObjectHideFlags: 0
