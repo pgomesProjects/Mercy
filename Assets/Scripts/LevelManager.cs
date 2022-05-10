@@ -98,7 +98,7 @@ public class LevelManager : MonoBehaviour
         isGameOver = true;
         if (audioManager != null)
         {
-            FindObjectOfType<AudioManager>().Stop(GameData.playingSongName);
+            FindObjectOfType<AudioManager>().PauseAllSounds();
             FindObjectOfType<AudioManager>().Play("GameOverSFX", PlayerPrefs.GetFloat("SFXVolume"));
         }
         SceneManager.LoadScene("GameOver");
