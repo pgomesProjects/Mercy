@@ -232,13 +232,12 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         float weightHandicap = 1;
-        if (PlayerPrefs.GetInt("HighScore") > 0) weightHandicap =  Mathf.Lerp(1, maxScoreMoveDebuff, Mathf.Min(playerScore / PlayerPrefs.GetInt("HighScore"), 1));
-        print(weightHandicap);
+        if (playerScore > PlayerPrefs.GetInt("HighScore") && PlayerPrefs.GetInt("HighScore") > 0) weightHandicap = maxScoreMoveDebuff;
 
         //Process input vector:
         Vector2 moveInput = context.ReadValue<Vector2>();                 //Get raw input vector
         float swimAngle = Vector2.Angle(Vector2.up, moveInput) / 180;     //Get float representing degrees off from forward move input is (as interpolant between 0-1)
-        moveInput *= baseSwimSpeed * swimDirModCurve.Evaluate(swimAngle); //Apply base swim speed and direction modifier to move input magnitude
+        moveInput *= baseSwimSpeed * swimDirModCurve.Evaluate(swimAngle) * weightHandicap; //Apply base swim speed and direction modifier to move input magnitude
 
         //Compute target movement:
         moveTarget = new Vector3(moveInput.x, moveTarget.y, moveInput.y); //Arrange moveInput values into Vector3 (without erasing existing vertical values)
@@ -282,6 +281,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(dashMoveTarget, ForceMode.Impulse);                                             //Apply dash vector to player rigidbody as instantaneous acceleration
 
             //Cleanup:
+            AudioManager.instance?.Play("Dash", PlayerPrefs.GetFloat("SFXVolume", 0.5f));
             timeSinceDash = 0; //Indicate that player is now dashing
         }
     }

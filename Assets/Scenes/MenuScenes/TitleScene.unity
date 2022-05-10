@@ -3080,6 +3080,11 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: Dash
+    clip: {fileID: 8300000, guid: a7c379942d310764d983937d00e52d5f, type: 3}
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!1 &1044891802
 GameObject:
   m_ObjectHideFlags: 0
