@@ -33,6 +33,7 @@ public class LevelManager : MonoBehaviour
         {
             GameData.playingSongName = "InGame";
             FindObjectOfType<AudioManager>().Play(GameData.playingSongName, PlayerPrefs.GetFloat("BGMVolume"));
+            AudioManager.instance?.Play("WaterAmb", PlayerPrefs.GetFloat("SFXVolume"));
         }
 
         personalBestText.text = "Personal Best: " + PlayerPrefs.GetInt("HighScore");

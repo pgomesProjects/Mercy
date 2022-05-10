@@ -68,6 +68,7 @@ public class PickupController : MonoBehaviour
         //If the item can be collected, tell the player that the item has been picked up and add to score
         if (canBeCollected)
         {
+            AudioManager.instance?.Play("PickupSound", PlayerPrefs.GetFloat("SFXVolume", 0.5f));
             PlayerController.main.playerScore += scoreValue;
             Debug.Log("Score: " + PlayerController.main.playerScore);
             LevelManager.main.UpdateScore(PlayerController.main.playerScore);

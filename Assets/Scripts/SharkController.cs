@@ -431,6 +431,7 @@ public class SharkController : MonoBehaviour
         {
             yield return new WaitForSeconds(dashTimer);
             Debug.Log("Dash!");
+            AudioManager.instance?.Play("SharkDash", PlayerPrefs.GetFloat("SFXVolume", 0.5f));
             currentSpeed = dashSpeed;
             yield return new WaitForSeconds(0.5f);
             currentSpeed = threatSpeed;
@@ -456,6 +457,7 @@ public class SharkController : MonoBehaviour
 
             //Stop the current threat music
             Cursor.visible = true;
+            AudioManager.instance?.Play("SharkBite", PlayerPrefs.GetFloat("SFXVolume", 0.5f));
             LevelManager.main.StopThreatMusic((int)currentThreatLevel);
             GameData.currentCauseOfDeath = GameData.CAUSEOFDEATH.SHARKATTACK;
             LevelManager.main.GameOver();

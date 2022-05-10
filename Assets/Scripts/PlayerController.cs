@@ -171,7 +171,9 @@ public class PlayerController : MonoBehaviour
         //If the oxygen percentage is greater than 0, constantly deplete it
         if(oxygenPercentage > 0)
         {
+            float prevOxy = oxygenPercentage;
             oxygenPercentage -= (1 / currentDepletionRate) * Time.deltaTime;
+            if (prevOxy >= 50 && oxygenPercentage < 50) AudioManager.instance?.Play("HighScoreSound", PlayerPrefs.GetFloat("SFXVolume", 0.5f));
 
             //Debug.Log("Oxygen At " + oxygenPercentage + "%");
 
