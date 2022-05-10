@@ -314,6 +314,16 @@ public class PlayerController : MonoBehaviour
         pickupProgressIndicator.gameObject.SetActive(false); //Hide progress indicator
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 9)
+        {
+            defaultOxygenDepletionRate = 0.03f;
+            dashOxygenDepletionRate = 0.03f;
+            secondsUntilOxygenDeath = 3;
+        }
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
