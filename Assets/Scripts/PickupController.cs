@@ -7,6 +7,7 @@ public class PickupController : MonoBehaviour
     [SerializeField] private int scoreValue;
     [SerializeField] private float massInPounds;
     [SerializeField] private Material litMat;
+    [Tooltip("Degrees on each euler angle this pickup may be rotated when being spawned randomly")] public Vector3 randomRotation;
 
     private MeshRenderer rnd;
     internal bool canBeCollected;

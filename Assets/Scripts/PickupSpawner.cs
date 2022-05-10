@@ -88,8 +88,29 @@ public class PickupSpawner : MonoBehaviour
         GameObject pickup = Instantiate(pickupPrefabs[Random.Range(0, pickupPrefabs.Count)]); //Spawn pickup
         spawnedPickups.Add(pickup);                                                           //Add pickup to spawner list
         pickup.GetComponent<PickupController>().spawner = this;                               //Give pickup a reference to its spawner
-        pickup.transform.parent = transform;                                                  //Child pickup to spawner
-        pickup.transform.position = worldSpawnPoint;                                          //Place pickup at spawn point
+
+        pickup.transform.parent = transform;                                           //Child pickup to spawner
+        pickup.transform.position = worldSpawnPoint;                                   //Place pickup at spawn point
+        Vector3 rotationRand = pickup.GetComponent<PickupController>().randomRotation; //Get rotation randomness from pickup prefab
+        if (rotationRand != Vector3.zero) //Pickup is being given a random rotation modifier
+        {
+            //Random pickup rotation:
+            Vector3 newRotation = pickup.transform.eulerAngles;             //Get initial rotation of pickup on spawn
+            newRotation.x += Random.Range(-rotationRand.x, rotationRand.x); //Add random X rotation within range
+            newRotation.y += Random.Range(-rotationRand.y, rotationRand.y); //Add random Y rotation within range
+            newRotation.z += Random.Range(-rotationRand.z, rotationRand.z); //Add random Z rotation within range
+            pickup.transform.eulerAngles = newRotation;                     //Set randomized pickup rotation
+        }
+
         print("Pickup spawned");
     }
+
+    //EDITOR METHODS:
+    #if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, spawnRadius);
+    }
+    #endif
 }
