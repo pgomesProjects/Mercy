@@ -224,6 +224,7 @@ public class PlayerController : MonoBehaviour
         LevelManager.main.StopThreatMusic((int)SharkController.main.currentThreatLevel);
         if (FindObjectOfType<AudioManager>() != null)
             FindObjectOfType<AudioManager>().Stop("OxygenChokingSFX");
+        GameData.currentCauseOfDeath = GameData.CAUSEOFDEATH.SUFFOCATION;
         LevelManager.main.GameOver();
     }
 

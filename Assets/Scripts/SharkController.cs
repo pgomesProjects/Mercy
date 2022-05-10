@@ -457,6 +457,7 @@ public class SharkController : MonoBehaviour
             //Stop the current threat music
             Cursor.visible = true;
             LevelManager.main.StopThreatMusic((int)currentThreatLevel);
+            GameData.currentCauseOfDeath = GameData.CAUSEOFDEATH.SHARKATTACK;
             LevelManager.main.GameOver();
         }
     }

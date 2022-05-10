@@ -8,6 +8,9 @@ public static class GameData
     internal static string playingSongName = "";
     internal static GameSettings currentSettings = new GameSettings();
 
+    public enum CAUSEOFDEATH { SHARKATTACK, SUFFOCATION};
+    internal static CAUSEOFDEATH currentCauseOfDeath;
+
 #if UNITY_STANDALONE
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 #endif
