@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
     public static LevelManager main;
 
     [SerializeField] private Image threatUI;
+    [SerializeField] private Image threatUIIcon;
     [SerializeField] private Color[] threatColors;
     [SerializeField] private TextMeshProUGUI personalBestText;
     [SerializeField] private Slider oxygenBar;
@@ -59,6 +60,11 @@ public class LevelManager : MonoBehaviour
     {
         Debug.Log("Threat UI: " + level);
         threatUI.color = threatColors[level];
+        threatUIIcon.color = threatColors[level];
+
+        //If the level is 0, make icon invisible
+        if (level == 0)
+            threatUIIcon.color = new Color(0, 0, 0, 0);
     }
 
     public void StartThreatMusic(int level)
