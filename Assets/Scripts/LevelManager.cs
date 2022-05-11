@@ -21,6 +21,11 @@ public class LevelManager : MonoBehaviour
 
     private AudioManager audioManager;
 
+    private readonly float maxThreatDistance = 600;
+    private readonly float minThreatDistance = 10;
+    private readonly float maxThreatIconScale = 1.7f;
+    private readonly float minThreatIconScale = 0.5f;
+
     private void Awake()
     {
         main = this;
@@ -38,6 +43,13 @@ public class LevelManager : MonoBehaviour
         }
 
         personalBestText.text = "Personal Best: " + PlayerPrefs.GetInt("HighScore");
+    }
+    private void Update()
+    {
+        float sharkDistInterpolant = 1;
+        float sharkDist = Vector3.Distance(SharkController.main.transform.position, PlayerController.main.transform.position);
+        sharkDistInterpolant = Mathf.Clamp(Mathf.InverseLerp(maxThreatDistance, minThreatDistance, sharkDist), 0, 1);
+        threatUIIcon.transform.localScale = Vector3.one * Mathf.Lerp(minThreatIconScale, maxThreatIconScale, sharkDistInterpolant);
     }
 
     public void UpdateScore(int score)
